@@ -1,4 +1,13 @@
 # Jeyos Hardhit Fitness Center
+## 🌐 Live Demo
+
+**Try the live application:**  
+https://jeyos-gym-demo.onrender.com/
+
+**Demo administrator password:** `demo123`
+
+> This is a portfolio demonstration using fictional data. The free hosting service may take some time to wake after inactivity, and demo data may reset after a restart or redeployment.
+
 ## Gym Management & Attendance System
 
 **Created & Developed by Blenda Saragena**
