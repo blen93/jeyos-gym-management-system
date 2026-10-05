@@ -1,0 +1,249 @@
+/* Core + Layout */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #333;
+}
+header {
+  background: #ffcc00;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.logo-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.page {
+  padding: 1rem;
+  margin-bottom: 60px;
+}
+.center-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+input {
+  width: 95%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+th, td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+tr:hover {
+  background-color: rgba(255, 204, 0, 0.1);
+}
+
+/* Dot for Remarks */
+.dot-cell::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: gold;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+tr:not(.has-remarks) .dot-cell::before {
+  display: none;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* Tooltip */
+tr.has-remarks {
+  position: relative;
+}
+tr.has-remarks::after {
+  content: attr(data-remarks);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background-color: #d9f2ff;
+  color: #004466;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  visibility: hidden;
+  z-index: 10;
+}
+tr.has-remarks:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+/* Modals */
+.modal, .confirm-modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content, .confirm-box {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  position: relative;
+}
+.confirm-box {
+  text-align: center;
+  animation: scaleIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-content img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 1rem auto;
+  cursor: pointer;
+}
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.action-buttons button,
+.confirm-box button {
+  background: #ffcc00;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.action-buttons button:hover,
+.confirm-box button:hover {
+  background: #e6b800;
+  transform: scale(1.05);
+}
+#photoInput {
+  display: none;
+}
+
+
+
+footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.3rem 0;
+      z-index: 997;
+    }
+
+    footer a {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    footer button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.7rem;
+      color: #666;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+    }
+
+    footer button i {
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
+      transition: all 0.3s ease;
+    }
+
+    footer button:hover,
+    footer button.active {
+      color: #ffcc00;
+    }
+
+    footer button:hover i,
+    footer button.active i {
+      color: #ffcc00;
+      transform: scale(1.2);
+    }
+
+
+
+.success-popup {
+  display: none;
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}

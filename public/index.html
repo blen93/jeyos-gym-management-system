@@ -1,0 +1,4976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Jeyo's Hardhit Fitness - Member Log</title>
+
+
+  <!-- =========================================================
+       FONT AWESOME
+       ========================================================= -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+
+  <!-- =========================================================
+       GOOGLE FONTS
+       ========================================================= -->
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  />
+
+
+  <!-- =========================================================
+       QR CODE SCANNER (CAMERA)
+       ========================================================= -->
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+
+  <!-- =========================================================
+       CSS LINKS
+       ========================================================= -->
+
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="css/status.css"
+  >
+
+
+  <style>
+
+    /* =========================================================
+       GLOBAL
+       ========================================================= */
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      font-family:
+        'Roboto',
+        sans-serif;
+
+      background: #f8f9fa;
+
+      color: #333;
+
+      padding-bottom: 40px;
+    }
+
+
+    h1,
+    h2,
+    h3,
+    .confirm-btn {
+
+      font-family:
+        'Oswald',
+        sans-serif;
+
+      text-transform: uppercase;
+    }
+
+
+    /* =========================================================
+       MODERN PREMIUM HEADER
+       ========================================================= */
+
+    header {
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffcc00 0%,
+          #ffb300 100%
+        );
+
+      padding:
+        0.7rem
+        1.2rem;
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.15);
+
+      position:
+        sticky;
+
+      top: 0;
+
+      z-index: 100;
+
+      border-bottom:
+        3px solid #1a1a1a;
+
+      min-height:
+        74px;
+    }
+
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .header-left {
+
+      display: flex;
+
+      align-items:
+        center;
+
+      min-width: 0;
+
+      z-index: 2;
+    }
+
+
+    .header-logo {
+
+      width: 58px;
+
+      height: 58px;
+
+      object-fit:
+        contain;
+
+      flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+       HEADER TITLE
+       ========================================================= */
+
+    .header-title {
+
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      top:
+        50%;
+
+      transform:
+        translate(
+          -50%,
+          -50%
+        );
+
+      width:
+        auto;
+
+      max-width:
+        calc(100% - 150px);
+
+      text-align:
+        center;
+
+      z-index:
+        1;
+
+      pointer-events:
+        none;
+
+      line-height:
+        1;
+    }
+
+
+    /* =========================================================
+       LARGE TOP TITLE
+       ========================================================= */
+
+    .header-title-main {
+
+      display:
+        block;
+
+      margin:
+        0;
+
+      font-family:
+        'Oswald',
+        sans-serif;
+
+      font-size:
+        1.45rem;
+
+      font-weight:
+        700;
+
+      color:
+        #1a1a1a;
+
+      letter-spacing:
+        1.5px;
+
+      line-height:
+        1;
+
+      text-transform:
+        uppercase;
+
+      white-space:
+        nowrap;
+    }
+
+
+    /* =========================================================
+       SMALL LOWER TITLE
+       ========================================================= */
+
+    .header-title-sub {
+
+      display:
+        block;
+
+      margin-top:
+        4px;
+
+      font-family:
+        'Roboto',
+        sans-serif;
+
+      font-size:
+        0.65rem;
+
+      font-weight:
+        700;
+
+      color:
+        #1a1a1a;
+
+      letter-spacing:
+        3px;
+
+      line-height:
+        1;
+
+      text-transform:
+        uppercase;
+
+      white-space:
+        nowrap;
+    }
+
+
+    /* =========================================================
+       ADMIN BUTTON
+       ========================================================= */
+
+    .header-right {
+
+      margin-left:
+        auto;
+
+      z-index:
+        2;
+    }
+
+
+    .header-right button {
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          0.08
+        );
+
+      border:
+        1px solid
+        rgba(
+          0,
+          0,
+          0,
+          0.1
+        );
+
+      color:
+        #1a1a1a;
+
+      width:
+        48px;
+
+      height:
+        48px;
+
+      border-radius:
+        12px;
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      cursor:
+        pointer;
+
+      font-size:
+        1.25rem;
+
+      flex-shrink:
+        0;
+    }
+
+
+    .header-right button:active {
+
+      transform:
+        scale(0.95);
+    }
+
+
+    /* =========================================================
+       DIGITAL CLOCK
+       ========================================================= */
+
+    #digitalClock.fitness-clock {
+
+      position:
+        relative;
+
+      width:
+        100%;
+
+      margin:
+        18px auto
+        22px;
+
+      padding:
+        0;
+
+      background:
+        transparent;
+
+      border:
+        none;
+
+      border-radius:
+        0;
+
+      overflow:
+        visible;
+
+      box-shadow:
+        none;
+
+      text-align:
+        center;
+
+      color:
+        #111;
+
+      user-select:
+        none;
+    }
+
+
+    /* =========================================================
+       CLOCK TIME ROW
+       ========================================================= */
+
+    #digitalClock .clock-time {
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      width:
+        100%;
+
+      margin:
+        0;
+
+      padding:
+        0;
+
+      font-family:
+        'Roboto',
+        Arial,
+        sans-serif;
+
+      font-size:
+        clamp(
+          3.5rem,
+          12vw,
+          6.5rem
+        );
+
+      font-weight:
+        900;
+
+      line-height:
+        0.95;
+
+      letter-spacing:
+        2px;
+
+      white-space:
+        nowrap;
+
+      color:
+        #050505;
+
+      text-shadow:
+        none;
+
+      overflow:
+        visible;
+    }
+
+
+    /* =========================================================
+       MAIN TIME
+       ========================================================= */
+
+    #digitalClock .clock-main-time {
+
+      display:
+        inline-block;
+
+      color:
+        #050505;
+
+      font-family:
+        'Roboto',
+        Arial,
+        sans-serif;
+
+      font-weight:
+        900;
+
+      letter-spacing:
+        2px;
+
+      line-height:
+        0.95;
+
+      text-shadow:
+        none;
+    }
+
+
+    /* =========================================================
+       AM / PM
+       ========================================================= */
+
+    #digitalClock .clock-period {
+
+      display:
+        none;
+    }
+
+
+    /* =========================================================
+       DATE UNDER CLOCK
+       ========================================================= */
+
+    #digitalClock .clock-date {
+
+      position:
+        relative;
+
+      z-index:
+        2;
+
+      margin:
+        12px 0 0;
+
+      padding:
+        0;
+
+      font-family:
+        'Roboto',
+        Arial,
+        sans-serif;
+
+      font-size:
+        clamp(
+          0.8rem,
+          2.5vw,
+          1.15rem
+        );
+
+      font-weight:
+        700;
+
+      letter-spacing:
+        1px;
+
+      line-height:
+        1.2;
+
+      text-transform:
+        none;
+
+      color:
+        #333;
+
+      text-shadow:
+        none;
+    }
+
+
+    /* =========================================================
+       MAIN CONTAINER
+       ========================================================= */
+
+    .container {
+
+      padding:
+        1.2rem;
+
+      max-width:
+        420px;
+
+      margin:
+        0 auto;
+
+      background:
+        white;
+
+      border-radius:
+        20px;
+
+      box-shadow:
+        0 10px 30px
+        rgba(
+          0,
+          0,
+          0,
+          0.08
+        );
+
+      text-align:
+        center;
+    }
+
+
+    /* =========================================================
+       QR SCANNER
+       ========================================================= */
+
+    #reader {
+
+      width:
+        100%;
+
+      border-radius:
+        12px;
+
+      overflow:
+        hidden;
+
+      margin-bottom:
+        1rem;
+
+      background:
+        #000;
+
+      display:
+        none;
+
+      border:
+        2px solid
+        #ffcc00;
+    }
+
+
+    /* =========================================================
+       INPUT
+       ========================================================= */
+
+    .input-group {
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        15px;
+    }
+
+
+    input[type="text"],
+    input[type="password"] {
+
+      width:
+        100%;
+
+      padding:
+        1rem;
+
+      font-size:
+        1.1rem;
+
+      border:
+        2px solid
+        #eee;
+
+      border-radius:
+        12px;
+
+      outline:
+        none;
+
+      text-align:
+        center;
+
+      background:
+        #fafafa;
+    }
+
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+
+      border-color:
+        #ffcc00;
+
+      background:
+        #fff;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .button-row {
+
+      display:
+        flex;
+
+      gap:
+        10px;
+    }
+
+
+    .btn-checkin {
+
+      flex:
+        1;
+
+      background:
+        linear-gradient(
+          180deg,
+          #333 0%,
+          #1a1a1a 100%
+        );
+
+      color:
+        #ffcc00;
+
+      padding:
+        0.9rem;
+
+      font-size:
+        1rem;
+
+      border:
+        none;
+
+      border-radius:
+        12px;
+
+      cursor:
+        pointer;
+
+      font-weight:
+        bold;
+
+      text-transform:
+        uppercase;
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      gap:
+        10px;
+
+      box-shadow:
+        0 4px 0 #000;
+    }
+
+
+    .btn-checkin:active {
+
+      transform:
+        translateY(2px);
+
+      box-shadow:
+        0 2px 0 #000;
+    }
+
+
+    .btn-checkin:disabled {
+
+      opacity:
+        0.6;
+
+      cursor:
+        not-allowed;
+    }
+
+
+    .btn-qr-small {
+
+      width:
+        60px;
+
+      background:
+        #ffcc00;
+
+      color:
+        #1a1a1a;
+
+      border:
+        none;
+
+      border-radius:
+        12px;
+
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      font-size:
+        1.3rem;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 4px 0 #cc9900;
+    }
+
+
+    .btn-qr-small:active {
+
+      transform:
+        translateY(2px);
+
+      box-shadow:
+        0 2px 0 #cc9900;
+    }
+
+
+    .btn-qr-small.active {
+
+      background:
+        #dc3545;
+
+      color:
+        white;
+
+      box-shadow:
+        0 4px 0 #a71d2a;
+    }
+
+
+    /* =========================================================
+       MODALS
+       ========================================================= */
+
+    .modal {
+
+      display:
+        none;
+
+      position:
+        fixed;
+
+      top:
+        0;
+
+      left:
+        0;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          0.85
+        );
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      z-index:
+        2000;
+
+      backdrop-filter:
+        blur(5px);
+    }
+
+
+    .modal-content {
+
+      background:
+        #fff;
+
+      padding:
+        2rem;
+
+      border-radius:
+        25px;
+
+      text-align:
+        center;
+
+      width:
+        90%;
+
+      max-width:
+        380px;
+
+      border-top:
+        8px solid
+        #ffcc00;
+
+      animation:
+        modalPop
+        0.3s
+        ease-out;
+    }
+
+
+    #failModal .modal-content,
+    #alertModal .modal-content {
+
+      border-top:
+        8px solid
+        #dc3545;
+    }
+
+
+    @keyframes modalPop {
+
+      from {
+
+        transform:
+          scale(0.8);
+
+        opacity:
+          0;
+      }
+
+      to {
+
+        transform:
+          scale(1);
+
+        opacity:
+          1;
+      }
+    }
+
+
+    /* =========================================================
+       MEMBER PHOTO
+       ========================================================= */
+
+    #modalPhoto {
+
+      width:
+        130px;
+
+      height:
+        130px;
+
+      border-radius:
+        50%;
+
+      object-fit:
+        cover;
+
+      border:
+        5px solid
+        #1a1a1a;
+
+      margin-bottom:
+        15px;
+
+      box-shadow:
+        0 5px 15px
+        rgba(
+          0,
+          0,
+          0,
+          0.2
+        );
+    }
+
+
+    /* =========================================================
+       CONFIRM BUTTON
+       ========================================================= */
+
+    .confirm-btn {
+
+      background:
+        #1a1a1a;
+
+      color:
+        #ffcc00;
+
+      border:
+        none;
+
+      padding:
+        14px;
+
+      border-radius:
+        12px;
+
+      width:
+        100%;
+
+      cursor:
+        pointer;
+
+      font-weight:
+        bold;
+
+      font-size:
+        1.1rem;
+
+      margin-top:
+        15px;
+
+      box-shadow:
+        0 4px 0 #000;
+    }
+
+
+    /* =========================================================
+       SECURITY UI
+       ========================================================= */
+
+    .security-timer {
+
+      font-size:
+        2.5rem;
+
+      color:
+        #dc3545;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        10px;
+
+      font-family:
+        'Oswald';
+    }
+
+
+    #securityInput {
+
+      border:
+        2px solid
+        #ffcc00;
+
+      background:
+        #fff9e6;
+
+      text-transform:
+        uppercase;
+    }
+
+
+    /* =========================================================
+       ATTENDANCE TABLE
+       ========================================================= */
+
+    .table-wrapper {
+
+      margin-top:
+        1.5rem;
+
+      border:
+        1px solid
+        #eee;
+
+      border-radius:
+        12px;
+
+      overflow:
+        hidden;
+
+      background:
+        #fff;
+    }
+
+
+    table {
+
+      width:
+        100%;
+
+      border-collapse:
+        collapse;
+
+      font-size:
+        0.85rem;
+
+      table-layout:
+        fixed;
+    }
+
+
+    thead {
+
+      display:
+        table;
+
+      width:
+        100%;
+
+      table-layout:
+        fixed;
+    }
+
+
+    th {
+
+      background:
+        #1a1a1a;
+
+      color:
+        #ffcc00;
+
+      padding:
+        12px 10px;
+
+      text-align:
+        left;
+
+      font-weight:
+        bold;
+    }
+
+
+    tbody {
+
+      display:
+        block;
+
+      max-height:
+        280px;
+
+      overflow-y:
+        auto;
+
+      overflow-x:
+        hidden;
+
+      width:
+        100%;
+
+      scrollbar-gutter:
+        stable;
+
+      scroll-behavior:
+        smooth;
+
+      -webkit-overflow-scrolling:
+        touch;
+    }
+
+
+    tbody tr {
+
+      display:
+        table;
+
+      width:
+        100%;
+
+      table-layout:
+        fixed;
+    }
+
+
+    td {
+
+      padding:
+        12px 10px;
+
+      border-bottom:
+        1px solid
+        #f1f1f1;
+
+      text-align:
+        left;
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+
+      white-space:
+        nowrap;
+    }
+
+
+    th,
+    td {
+
+      width:
+        33.3333%;
+    }
+
+
+    /* =========================================================
+       TABLE SCROLLBAR
+       ========================================================= */
+
+    tbody::-webkit-scrollbar {
+
+      width:
+        6px;
+    }
+
+
+    tbody::-webkit-scrollbar-track {
+
+      background:
+        #f5f5f5;
+    }
+
+
+    tbody::-webkit-scrollbar-thumb {
+
+      background:
+        #bbb;
+
+      border-radius:
+        10px;
+    }
+
+
+    tbody::-webkit-scrollbar-thumb:hover {
+
+      background:
+        #888;
+    }
+
+
+    /* =========================================================
+       ADMIN ERROR MODAL
+       ========================================================= */
+
+    #adminErrorModal .admin-err-content {
+
+      border-top:
+        8px solid
+        #dc3545;
+
+      background:
+        #ffffff;
+
+      border-radius:
+        24px;
+
+      padding:
+        2.2rem 1.5rem;
+
+      box-shadow:
+        0 20px 40px
+        rgba(
+          220,
+          53,
+          69,
+          0.3
+        );
+
+      animation:
+        modalShakePop
+        0.45s
+        cubic-bezier(
+          0.36,
+          0.07,
+          0.19,
+          0.97
+        )
+        forwards;
+    }
+
+
+    .admin-err-icon-box {
+
+      position:
+        relative;
+
+      width:
+        80px;
+
+      height:
+        80px;
+
+      margin:
+        0 auto 15px auto;
+
+      background:
+        #ffe6e6;
+
+      border-radius:
+        50%;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      font-size:
+        2.5rem;
+
+      color:
+        #dc3545;
+
+      border:
+        3px solid
+        #ffcccc;
+    }
+
+
+    .admin-err-icon-box
+    .err-badge {
+
+      position:
+        absolute;
+
+      bottom:
+        -2px;
+
+      right:
+        -2px;
+
+      font-size:
+        1.3rem;
+
+      color:
+        #dc3545;
+
+      background:
+        #fff;
+
+      border-radius:
+        50%;
+    }
+
+
+    .admin-err-title {
+
+      color:
+        #dc3545;
+
+      font-size:
+        1.6rem;
+
+      margin:
+        0 0 8px 0;
+
+      letter-spacing:
+        1px;
+    }
+
+
+    .admin-err-msg {
+
+      font-weight:
+        bold;
+
+      font-size:
+        1.05rem;
+
+      color:
+        #1a1a1a;
+
+      margin:
+        0 0 6px 0;
+    }
+
+
+    .admin-err-sub {
+
+      font-size:
+        0.82rem;
+
+      color:
+        #777;
+
+      margin-bottom:
+        20px;
+    }
+
+
+    .admin-err-btn {
+
+      background:
+        linear-gradient(
+          180deg,
+          #dc3545 0%,
+          #b02a37 100%
+        );
+
+      color:
+        #ffffff;
+
+      box-shadow:
+        0 4px 0 #842029;
+    }
+
+
+    .admin-err-btn:active {
+
+      transform:
+        translateY(2px);
+
+      box-shadow:
+        0 2px 0 #842029;
+    }
+
+
+    @keyframes modalShakePop {
+
+      0% {
+
+        transform:
+          scale(0.7);
+
+        opacity:
+          0;
+      }
+
+      40% {
+
+        transform:
+          scale(1.05);
+
+        opacity:
+          1;
+      }
+
+      50% {
+
+        transform:
+          scale(1)
+          translateX(-10px);
+      }
+
+      60% {
+
+        transform:
+          translateX(10px);
+      }
+
+      70% {
+
+        transform:
+          translateX(-6px);
+      }
+
+      80% {
+
+        transform:
+          translateX(6px);
+      }
+
+      90% {
+
+        transform:
+          translateX(-2px);
+      }
+
+      100% {
+
+        transform:
+          translateX(0);
+      }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 480px) {
+
+      header {
+
+        padding:
+          0.6rem
+          0.7rem;
+
+        min-height:
+          68px;
+      }
+
+
+      .header-logo {
+
+        width:
+          50px;
+
+        height:
+          50px;
+      }
+
+
+      .header-title {
+
+        max-width:
+          calc(
+            100% - 125px
+          );
+      }
+
+
+      .header-title-main {
+
+        font-size:
+          1.05rem;
+
+        letter-spacing:
+          1px;
+
+        line-height:
+          1;
+
+        white-space:
+          nowrap;
+      }
+
+
+      .header-title-sub {
+
+        margin-top:
+          3px;
+
+        font-size:
+          0.5rem;
+
+        letter-spacing:
+          2px;
+
+        line-height:
+          1;
+
+        white-space:
+          nowrap;
+      }
+
+
+      .header-right button {
+
+        width:
+          44px;
+
+        height:
+          44px;
+
+        font-size:
+          1.1rem;
+      }
+
+
+      #digitalClock.fitness-clock {
+
+        width:
+          100%;
+
+        margin:
+          15px auto
+          18px;
+
+        padding:
+          0;
+
+        background:
+          transparent;
+
+        border:
+          none;
+
+        box-shadow:
+          none;
+      }
+
+
+      #digitalClock .clock-time {
+
+        font-size:
+          clamp(
+            2.8rem,
+            13vw,
+            4.5rem
+          );
+
+        font-weight:
+          900;
+
+        letter-spacing:
+          1px;
+
+        line-height:
+          0.95;
+
+        text-shadow:
+          none;
+      }
+
+
+      #digitalClock .clock-main-time {
+
+        font-weight:
+          900;
+
+        letter-spacing:
+          1px;
+
+        color:
+          #050505;
+
+        text-shadow:
+          none;
+      }
+
+
+      #digitalClock .clock-date {
+
+        font-size:
+          clamp(
+            0.65rem,
+            3vw,
+            0.9rem
+          );
+
+        margin-top:
+          10px;
+
+        letter-spacing:
+          0.5px;
+
+        font-weight:
+          700;
+
+        text-shadow:
+          none;
+      }
+    }
+
+
+    /* =========================================================
+       EXTRA SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 360px) {
+
+      header {
+
+        padding-left:
+          0.5rem;
+
+        padding-right:
+          0.5rem;
+      }
+
+
+      .header-logo {
+
+        width:
+          45px;
+
+        height:
+          45px;
+      }
+
+
+      .header-title {
+
+        max-width:
+          calc(
+            100% - 110px
+          );
+      }
+
+
+      .header-title-main {
+
+        font-size:
+          0.9rem;
+
+        letter-spacing:
+          0.7px;
+      }
+
+
+      .header-title-sub {
+
+        font-size:
+          0.43rem;
+
+        letter-spacing:
+          1.5px;
+      }
+
+
+      .header-right button {
+
+        width:
+          40px;
+
+        height:
+          40px;
+      }
+
+
+      #digitalClock.fitness-clock {
+
+        margin:
+          13px auto
+          16px;
+      }
+
+
+      #digitalClock .clock-time {
+
+        font-size:
+          2.3rem;
+
+        letter-spacing:
+          0;
+
+        font-weight:
+          900;
+
+        line-height:
+          0.95;
+
+        text-shadow:
+          none;
+      }
+
+
+      #digitalClock .clock-main-time {
+
+        font-weight:
+          900;
+
+        letter-spacing:
+          0;
+
+        text-shadow:
+          none;
+      }
+
+
+      #digitalClock .clock-date {
+
+        font-size:
+          0.56rem;
+
+        letter-spacing:
+          0.3px;
+
+        margin-top:
+          9px;
+
+        text-shadow:
+          none;
+      }
+    }
+
+
+    /* =========================================================
+       ACCESSIBILITY
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      #digitalClock .clock-time {
+
+        animation:
+          none;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
+
+  <header>
+
+    <div class="header-left">
+
+      <img
+        src="images/logo.png"
+        alt="Jeyo's Hardhit Fitness Center Logo"
+        class="header-logo"
+      />
+
+    </div>
+
+
+    <div class="header-title">
+
+      <div class="header-title-main">
+        Jeyo's Hardhit
+      </div>
+
+      <div class="header-title-sub">
+        Fitness Center
+      </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+      <button
+        type="button"
+        onclick="openAdminModal()"
+        title="Admin Access"
+      >
+
+        <i class="fas fa-user-shield"></i>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       DIGITAL CLOCK
+       ========================================================= -->
+
+  <div
+    id="digitalClock"
+    class="fitness-clock"
+    aria-label="Current date and time"
+  >
+
+    <div
+      class="clock-time"
+      aria-live="polite"
+    >
+
+      <span class="clock-main-time">
+        00:00:00
+      </span>
+
+      <span class="clock-period">
+        AM
+      </span>
+
+    </div>
+
+
+    <div class="clock-date">
+      Wednesday, September 23, 2026
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       MAIN CONTAINER
+       ========================================================= -->
+
+  <div class="container">
+
+
+    <!-- =======================================================
+         QR SCANNER (CAMERA)
+         ======================================================= -->
+
+    <div id="reader"></div>
+
+
+    <!-- =======================================================
+         CHECK-IN FORM
+         ======================================================= -->
+
+    <form id="checkinForm">
+
+      <div class="input-group">
+
+        <input
+          type="text"
+          id="memberIdInput"
+          placeholder="ENTER MEMBER ID"
+          autocomplete="off"
+          readonly
+          onclick="this.removeAttribute('readonly');"
+          onblur="this.setAttribute('readonly', 'readonly');"
+          required
+        />
+
+
+        <div class="button-row">
+
+          <button
+            type="submit"
+            class="btn-checkin"
+          >
+
+            <i class="fas fa-sign-in-alt"></i>
+
+            CHECK-IN
+
+          </button>
+
+
+          <button
+            type="button"
+            id="scannerBtn"
+            class="btn-qr-small"
+            title="Scan QR Code via Camera"
+          >
+
+            <i class="fas fa-qrcode"></i>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+
+    <!-- =======================================================
+         ATTENDANCE TABLE
+         ======================================================= -->
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Member
+            </th>
+
+            <th>
+              Time
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="checkinTableBody"
+        ></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       SECURITY MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="securityModal"
+  >
+
+    <div class="modal-content">
+
+      <i
+        class="fas fa-shield-alt"
+        style="
+          font-size:3rem;
+          color:#ffcc00;
+          margin-bottom:10px;
+        "
+      ></i>
+
+
+      <h2 style="margin:0;">
+        Identity Check
+      </h2>
+
+
+      <div
+        class="security-timer"
+        id="secTimer"
+      >
+        30
+      </div>
+
+
+      <p
+        id="secQuestion"
+        style="
+          font-weight:bold;
+          margin-bottom:15px;
+          color:#555;
+        "
+      ></p>
+
+
+      <input
+        type="text"
+        id="securityInput"
+        placeholder="TYPE INITIAL HERE (e.g. A)"
+        maxlength="3"
+        autocomplete="off"
+      >
+
+
+      <div
+        class="button-row"
+        style="margin-top:15px;"
+      >
+
+        <button
+          type="button"
+          class="confirm-btn"
+          style="margin-top:0;"
+          onclick="validateSecurity()"
+        >
+          VERIFY NOW
+        </button>
+
+
+        <button
+          type="button"
+          class="btn-checkin"
+          style="
+            background:#eee;
+            color:#333;
+            box-shadow:0 4px 0 #ccc;
+          "
+          onclick="cancelSecurity()"
+        >
+          CANCEL
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       CONFIRM MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="confirmModal"
+  >
+
+    <div class="modal-content">
+
+      <img
+        id="modalPhoto"
+        src=""
+        alt="Member Photo"
+      />
+
+
+      <h2
+        id="modalName"
+        style="
+          margin:5px 0;
+          color:#1a1a1a;
+        "
+      >
+        ---
+      </h2>
+
+
+      <div
+        style="
+          font-size:0.95rem;
+          color:#666;
+          margin-bottom:5px;
+        "
+      >
+        Member Expiry
+      </div>
+
+
+      <div
+        id="modalExpiryDate"
+        style="
+          font-weight:700;
+          font-size:1.1rem;
+          color:#333;
+        "
+      >
+        --/--/--
+      </div>
+
+
+      <p
+        id="modalExpiryText"
+        style="
+          font-weight:bold;
+          margin-top:15px;
+          padding:10px;
+          border-radius:8px;
+          margin-bottom:0;
+        "
+      ></p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       FAIL MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="failModal"
+  >
+
+    <div class="modal-content">
+
+      <i
+        class="fas fa-user-lock"
+        style="
+          font-size:3.5rem;
+          color:#dc3545;
+          margin-bottom:15px;
+        "
+      ></i>
+
+
+      <h2
+        style="
+          margin:0 0 10px 0;
+          color:#dc3545;
+        "
+      >
+        Security Lockout
+      </h2>
+
+
+      <p
+        id="failModalReason"
+        style="
+          font-weight:bold;
+          font-size:1.05rem;
+          color:#1a1a1a;
+          margin-bottom:5px;
+        "
+      >
+        Access Denied
+      </p>
+
+
+      <p
+        id="failModalTimerText"
+        style="
+          color:#666;
+          font-size:0.9rem;
+          margin-top:0;
+          line-height:1.4;
+        "
+      ></p>
+
+
+      <button
+        type="button"
+        class="confirm-btn"
+        style="
+          background:#dc3545;
+          color:white;
+          box-shadow:0 4px 0 #a71d2a;
+          margin-top:20px;
+        "
+        onclick="closeFailModal()"
+      >
+        CLOSE WINDOW
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       ALERT MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="alertModal"
+  >
+
+    <div class="modal-content">
+
+      <i
+        id="alertModalIcon"
+        class="fas fa-exclamation-triangle"
+        style="
+          font-size:3.5rem;
+          color:#dc3545;
+          margin-bottom:15px;
+        "
+      ></i>
+
+
+      <h2
+        id="alertModalTitle"
+        style="
+          margin:0 0 10px 0;
+          color:#dc3545;
+        "
+      >
+        Error
+      </h2>
+
+
+      <p
+        id="alertModalMessage"
+        style="
+          font-weight:bold;
+          font-size:1.05rem;
+          color:#1a1a1a;
+          margin-bottom:20px;
+        "
+      >
+        Something went wrong.
+      </p>
+
+
+      <button
+        type="button"
+        class="confirm-btn"
+        style="
+          background:#1a1a1a;
+          color:#ffcc00;
+          box-shadow:0 4px 0 #000;
+        "
+        onclick="closeAlertModal()"
+      >
+        DISMISS
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       INCORRECT ADMIN PASSWORD MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="adminErrorModal"
+  >
+
+    <div
+      class="modal-content admin-err-content"
+    >
+
+      <div class="admin-err-icon-box">
+
+        <i class="fas fa-user-ninja"></i>
+
+        <i
+          class="fas fa-times-circle err-badge"
+        ></i>
+
+      </div>
+
+
+      <h2 class="admin-err-title">
+        ACCESS DENIED
+      </h2>
+
+
+      <p class="admin-err-msg">
+        Incorrect Administrator Password!
+      </p>
+
+
+      <div class="admin-err-sub">
+        Security logged this attempt.
+        Please verify credentials.
+      </div>
+
+
+      <button
+        type="button"
+        class="confirm-btn admin-err-btn"
+        onclick="closeAdminErrorModal()"
+      >
+        TRY AGAIN
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       ADMIN ACCESS MODAL
+       ========================================================= -->
+
+  <div
+    class="modal"
+    id="adminModal"
+  >
+
+    <div class="modal-content">
+
+      <h2 style="margin-top:0;">
+        Admin Access
+      </h2>
+
+
+      <form id="adminLoginForm">
+
+        <input
+          type="password"
+          id="adminPass"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        >
+
+
+        <div
+          class="button-row"
+          style="margin-top:15px;"
+        >
+
+          <button
+            type="submit"
+            id="adminSubmitBtn"
+            class="btn-checkin"
+          >
+            LOGIN
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-checkin"
+            onclick="closeAdminModal()"
+            style="
+              background:#eee;
+              color:#333;
+              box-shadow:0 4px 0 #ccc;
+            "
+          >
+            BACK
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+
+  <script>
+
+    // =========================================================
+    // DISABLE NATIVE ALERTS
+    // =========================================================
+
+    window.alert = function() {};
+
+
+    // =========================================================
+    // API CONFIGURATION
+    // =========================================================
+
+    const SERVER_PORT = 3000;
+
+
+    const HOSTNAME =
+      window.location.hostname ||
+      'localhost';
+
+
+    const API_BASE =
+      (
+        window.location.protocol &&
+        window.location.protocol.startsWith('http')
+      )
+        ? '/api'
+        : `http://${HOSTNAME}:${SERVER_PORT}/api`;
+
+
+    // =========================================================
+    // GLOBAL VARIABLES
+    // =========================================================
+
+    let secCountdown = null;
+
+    let activeSecMember = null;
+
+    let expectedAnswer = null;
+
+    let html5QrCode = null;
+
+    let audioCtx = null;
+
+    let confirmTimer = null;
+
+    let wakeLock = null;
+
+
+    // =========================================================
+    // KEEP SCREEN AWAKE (WAKE LOCK API)
+    // =========================================================
+
+    async function requestWakeLock() {
+
+      try {
+
+        if ('wakeLock' in navigator) {
+
+          wakeLock = await navigator.wakeLock.request('screen');
+
+          console.log('Screen Wake Lock active');
+
+
+          document.addEventListener('visibilitychange', async () => {
+
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+
+              wakeLock = await navigator.wakeLock.request('screen');
+
+            }
+
+          });
+
+        } else {
+
+          console.warn('Wake Lock API not supported in this browser or WebView.');
+
+        }
+
+      } catch (err) {
+
+        console.error(`Wake Lock Error: ${err.name}, ${err.message}`);
+
+      }
+
+    }
+
+
+    // =========================================================
+    // ESCAPE HTML
+    // =========================================================
+
+    function escapeHtml(
+      value = ""
+    ) {
+
+      return String(value ?? '')
+
+        .replace(
+          /&/g,
+          '&amp;'
+        )
+
+        .replace(
+          /</g,
+          '&lt;'
+        )
+
+        .replace(
+          />/g,
+          '&gt;'
+        )
+
+        .replace(
+          /"/g,
+          '&quot;'
+        )
+
+        .replace(
+          /'/g,
+          '&#039;'
+        );
+
+    }
+
+
+    // =========================================================
+    // PAGE INITIALIZATION
+    // =========================================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+        requestWakeLock();
+
+        updateTable();
+
+
+        // =========================================================
+        // GLOBAL HARDWARE SCANNER BUFFER LISTENER
+        // =========================================================
+
+        let scanBuffer = "";
+        let scanTimeout = null;
+
+        document.addEventListener("keydown", function(e) {
+
+          const activeEl = document.activeElement;
+
+          if (
+            activeEl &&
+            (activeEl.id === "adminPass" || activeEl.id === "securityInput")
+          ) {
+            return;
+          }
+
+
+          clearTimeout(scanTimeout);
+
+          scanTimeout = setTimeout(function() {
+            scanBuffer = "";
+          }, 100);
+
+
+          if (e.key === "Enter") {
+
+            if (scanBuffer.trim().length > 0) {
+
+              e.preventDefault();
+
+
+              const scannedId = scanBuffer.trim();
+
+              scanBuffer = "";
+
+
+              const inputEl = document.getElementById("memberIdInput");
+
+              if (inputEl) {
+                inputEl.value = scannedId;
+              }
+
+
+              processCheckIn(scannedId);
+
+            }
+
+          } else if (e.key.length === 1) {
+
+            scanBuffer += e.key;
+
+          }
+
+        });
+
+
+        // =========================================================
+        // MANUAL INPUT FIELD LISTENER
+        // =========================================================
+
+        const memberInput =
+          document.getElementById("memberIdInput");
+
+
+        if (memberInput) {
+
+          memberInput.addEventListener("keydown", function(e) {
+
+            if (e.key === "Enter") {
+
+              e.preventDefault();
+
+
+              const scannedId =
+                memberInput.value.trim();
+
+
+              if (scannedId) {
+                processCheckIn(scannedId);
+              }
+
+            }
+
+          });
+
+        }
+
+
+        // =========================================================
+        // FORM SUBMISSIONS & EVENT LISTENERS
+        // =========================================================
+
+        const form =
+          document.getElementById(
+            "checkinForm"
+          );
+
+
+        if (form) {
+
+          form.addEventListener(
+            "submit",
+            function(e) {
+
+              if (
+                e &&
+                typeof e.preventDefault ===
+                  "function"
+              ) {
+
+                e.preventDefault();
+
+              }
+
+
+              const input =
+                document.getElementById(
+                  "memberIdInput"
+                );
+
+
+              const inputVal =
+                input
+                  ? input.value
+                  : "";
+
+
+              if (inputVal.trim()) {
+                processCheckIn(inputVal.trim());
+              }
+
+            }
+          );
+
+        }
+
+
+        const adminForm =
+          document.getElementById(
+            "adminLoginForm"
+          );
+
+
+        if (adminForm) {
+
+          adminForm.addEventListener(
+            "submit",
+            function(e) {
+
+              if (
+                e &&
+                typeof e.preventDefault ===
+                  "function"
+              ) {
+
+                e.preventDefault();
+
+              }
+
+
+              checkAdmin();
+
+            }
+          );
+
+        }
+
+
+        const secInput =
+          document.getElementById(
+            "securityInput"
+          );
+
+
+        if (secInput) {
+
+          secInput.addEventListener(
+            "keydown",
+            function(e) {
+
+              if (e.key === "Enter") {
+
+                e.preventDefault();
+
+
+                validateSecurity();
+
+              }
+
+            }
+          );
+
+        }
+
+      }
+    );
+
+
+    // =========================================================
+    // DIGITAL CLOCK
+    // =========================================================
+
+    function updateDigitalClock() {
+
+      const clock =
+        document.getElementById(
+          "digitalClock"
+        );
+
+
+      if (!clock) return;
+
+
+      const now =
+        new Date();
+
+
+      const dateText =
+        now.toLocaleDateString(
+          "en-US",
+          {
+            weekday:
+              "long",
+
+            month:
+              "long",
+
+            day:
+              "numeric",
+
+            year:
+              "numeric"
+          }
+        );
+
+
+      const timeText =
+        now.toLocaleTimeString(
+          "en-US",
+          {
+            hour:
+              "2-digit",
+
+            minute:
+              "2-digit",
+
+            second:
+              "2-digit",
+
+            hour12:
+              false
+          }
+        );
+
+
+      const mainTimeEl =
+        clock.querySelector(
+          ".clock-main-time"
+        );
+
+
+      const dateEl =
+        clock.querySelector(
+          ".clock-date"
+        );
+
+
+      let formattedTime =
+        timeText;
+
+
+      const timeParts =
+        timeText.split(":");
+
+
+      if (
+        timeParts.length === 3
+      ) {
+
+        let hours =
+          timeParts[0];
+
+        let minutes =
+          timeParts[1];
+
+        let seconds =
+          timeParts[2];
+
+
+        hours =
+          hours.padStart(
+            2,
+            "0"
+          );
+
+        minutes =
+          minutes.padStart(
+            2,
+            "0"
+          );
+
+        seconds =
+          seconds.padStart(
+            2,
+            "0"
+          );
+
+
+        formattedTime =
+          `${hours}:${minutes}:${seconds}`;
+      }
+
+
+      if (mainTimeEl) {
+
+        mainTimeEl.textContent =
+          formattedTime;
+
+      }
+
+
+      if (dateEl) {
+
+        dateEl.textContent =
+          dateText;
+
+      }
+
+    }
+
+
+    updateDigitalClock();
+
+
+    setInterval(
+      updateDigitalClock,
+      1000
+    );
+
+
+    // =========================================================
+    // AUDIO
+    // =========================================================
+
+    function initAudio() {
+
+      if (!audioCtx) {
+
+        const AudioContextClass =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+
+        if (AudioContextClass) {
+
+          audioCtx =
+            new AudioContextClass();
+
+        }
+
+      }
+
+    }
+
+
+    function playBeep(
+      freq = 440,
+      duration = 0.2,
+      type = "sine"
+    ) {
+
+      try {
+
+        initAudio();
+
+
+        if (!audioCtx) return;
+
+
+        const osc =
+          audioCtx.createOscillator();
+
+
+        const gain =
+          audioCtx.createGain();
+
+
+        osc.type =
+          type;
+
+
+        osc.frequency.setValueAtTime(
+          freq,
+          audioCtx.currentTime
+        );
+
+
+        gain.gain.setValueAtTime(
+          0.1,
+          audioCtx.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioCtx.currentTime +
+          duration
+        );
+
+
+        osc.connect(gain);
+
+
+        gain.connect(
+          audioCtx.destination
+        );
+
+
+        osc.start();
+
+
+        osc.stop(
+          audioCtx.currentTime +
+          duration
+        );
+
+      } catch (e) {
+
+        console.log(
+          "Audio play blocked"
+        );
+
+      }
+
+    }
+
+
+    function speakMessage(
+      text = ""
+    ) {
+
+      if (
+        "speechSynthesis" in window
+      ) {
+
+        window.speechSynthesis.cancel();
+
+
+        const msg =
+          new SpeechSynthesisUtterance();
+
+
+        msg.text =
+          text;
+
+
+        window.speechSynthesis.speak(
+          msg
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // ALERT MODALS
+    // =========================================================
+
+    function showAlertModal(
+      title = "Error",
+      message = "",
+      iconClass =
+        "fa-exclamation-triangle"
+    ) {
+
+      const titleEl =
+        document.getElementById(
+          "alertModalTitle"
+        );
+
+
+      const msgEl =
+        document.getElementById(
+          "alertModalMessage"
+        );
+
+
+      const iconEl =
+        document.getElementById(
+          "alertModalIcon"
+        );
+
+
+      const modalEl =
+        document.getElementById(
+          "alertModal"
+        );
+
+
+      if (titleEl) {
+
+        titleEl.innerText =
+          title;
+
+      }
+
+
+      if (msgEl) {
+
+        msgEl.innerText =
+          message;
+
+      }
+
+
+      if (iconEl) {
+
+        iconEl.className =
+          `fas ${iconClass}`;
+
+      }
+
+
+      if (modalEl) {
+
+        modalEl.style.display =
+          "flex";
+
+      }
+
+    }
+
+
+    function closeAlertModal() {
+
+      const modalEl =
+        document.getElementById(
+          "alertModal"
+        );
+
+
+      if (modalEl) {
+
+        modalEl.style.display =
+          "none";
+
+      }
+
+    }
+
+
+    function showAdminErrorModal() {
+
+      const modal =
+        document.getElementById(
+          "adminErrorModal"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "flex";
+
+      }
+
+    }
+
+
+    function closeAdminErrorModal() {
+
+      const modal =
+        document.getElementById(
+          "adminErrorModal"
+        );
+
+
+      const passEl =
+        document.getElementById(
+          "adminPass"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "none";
+
+      }
+
+
+      if (passEl) {
+
+        passEl.value =
+          "";
+
+        passEl.focus();
+
+      }
+
+    }
+
+
+    // =========================================================
+    // QR SCANNER (CAMERA)
+    // =========================================================
+
+    const scannerBtn =
+      document.getElementById(
+        "scannerBtn"
+      );
+
+
+    if (scannerBtn) {
+
+      scannerBtn.onclick =
+        function(e) {
+
+          if (
+            e &&
+            typeof e.preventDefault ===
+              "function"
+          ) {
+
+            e.preventDefault();
+
+          }
+
+
+          initAudio();
+
+
+          const readerEl =
+            document.getElementById(
+              "reader"
+            );
+
+
+          if (!html5QrCode) {
+
+            if (readerEl) {
+
+              readerEl.style.display =
+                "block";
+
+            }
+
+
+            html5QrCode =
+              new Html5Qrcode(
+                "reader"
+              );
+
+
+            html5QrCode.start(
+
+              {
+                facingMode:
+                  "environment"
+              },
+
+              {
+                fps:
+                  12,
+
+                qrbox: {
+                  width:
+                    250,
+
+                  height:
+                    250
+                }
+              },
+
+              function(txt) {
+
+                const scannedId =
+                  String(txt).trim();
+
+
+                const inputEl =
+                  document.getElementById(
+                    "memberIdInput"
+                  );
+
+
+                if (inputEl) {
+
+                  inputEl.value =
+                    scannedId;
+
+                }
+
+
+                processCheckIn(
+                  scannedId
+                );
+
+
+                stopScanner();
+
+              },
+
+              function() {}
+
+            )
+
+            .then(function() {
+
+              if (scannerBtn) {
+
+                scannerBtn.classList.add(
+                  "active"
+                );
+
+              }
+
+            })
+
+            .catch(function(err) {
+
+              console.error(
+                "Camera startup error:",
+                err
+              );
+
+
+              showAlertModal(
+                "Camera Error",
+                "Failed to access camera. Ensure camera permissions are granted."
+              );
+
+
+              if (readerEl) {
+
+                readerEl.style.display =
+                  "none";
+
+              }
+
+            });
+
+          } else {
+
+            stopScanner();
+
+          }
+
+        };
+
+    }
+
+
+    function stopScanner() {
+
+      if (html5QrCode) {
+
+        html5QrCode.stop()
+
+          .then(function() {
+
+            html5QrCode =
+              null;
+
+
+            const readerEl =
+              document.getElementById(
+                "reader"
+              );
+
+
+            const btnEl =
+              document.getElementById(
+                "scannerBtn"
+              );
+
+
+            if (readerEl) {
+
+              readerEl.style.display =
+                "none";
+
+            }
+
+
+            if (btnEl) {
+
+              btnEl.classList.remove(
+                "active"
+              );
+
+            }
+
+          })
+
+          .catch(function(err) {
+
+            console.error(
+              "Error shutting down camera module:",
+              err
+            );
+
+
+            html5QrCode =
+              null;
+
+
+            const readerEl =
+              document.getElementById(
+                "reader"
+              );
+
+
+            const btnEl =
+              document.getElementById(
+                "scannerBtn"
+              );
+
+
+            if (readerEl) {
+
+              readerEl.style.display =
+                "none";
+
+            }
+
+
+            if (btnEl) {
+
+              btnEl.classList.remove(
+                "active"
+              );
+
+            }
+
+          });
+
+      }
+
+    }
+
+
+    // =========================================================
+    // LOCKOUT HANDLING
+    // =========================================================
+
+    function isLockedOut(
+      id = ""
+    ) {
+
+      const lockData =
+        localStorage.getItem(
+          `lockout_${id.toLowerCase()}`
+        );
+
+
+      if (lockData) {
+
+        const remaining =
+          parseInt(
+            lockData,
+            10
+          ) -
+          Date.now();
+
+
+        if (remaining > 0) {
+
+          const mins =
+            Math.ceil(
+              remaining /
+              (
+                1000 *
+                60
+              )
+            );
+
+
+          speakMessage(
+            "Access temporarily denied for one hour"
+          );
+
+
+          const reasonEl =
+            document.getElementById(
+              "failModalReason"
+            );
+
+
+          const timerEl =
+            document.getElementById(
+              "failModalTimerText"
+            );
+
+
+          const modalEl =
+            document.getElementById(
+              "failModal"
+            );
+
+
+          if (reasonEl) {
+
+            reasonEl.innerText =
+              "ACCOUNT IS TEMPORARILY LOCKED";
+
+          }
+
+
+          if (timerEl) {
+
+            timerEl.innerText =
+              `This ID failed a previous verification test.
+Please check back in ${mins} minutes or speak with management.`;
+
+          }
+
+
+          if (modalEl) {
+
+            modalEl.style.display =
+              "flex";
+
+          }
+
+
+          return true;
+
+        }
+
+      }
+
+
+      return false;
+
+    }
+
+
+    // =========================================================
+    // CHECK-IN PROCESSING
+    // =========================================================
+
+    async function processCheckIn(
+      rawId = ""
+    ) {
+
+      const searchId =
+        rawId
+          ? rawId.trim()
+          : "";
+
+
+      if (
+        !searchId ||
+        isLockedOut(searchId)
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const resMember =
+          await fetch(
+            `${API_BASE}/members/${encodeURIComponent(searchId)}`
+          );
+
+
+        if (!resMember.ok) {
+
+          playBeep(
+            110,
+            0.5,
+            "square"
+          );
+
+
+          speakMessage(
+            "ID Not Found"
+          );
+
+
+          showAlertModal(
+            "ID Not Found",
+            `Member ID "${searchId}" is not recognized in gym records.`,
+            "fa-user-times"
+          );
+
+
+          return;
+
+        }
+
+
+        const found =
+          await resMember.json();
+
+
+        const todayStr =
+          new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+        const resLogs =
+          await fetch(
+            `${API_BASE}/attendance?date=${todayStr}`
+          );
+
+
+        const logs =
+          resLogs.ok
+            ? await resLogs.json()
+            : [];
+
+
+        const userTodayLogs =
+          logs
+
+            .filter(function(l) {
+
+              const lId =
+                l.memberId ||
+                l.id ||
+                l.member_id;
+
+
+              const targetId =
+                found.id ||
+                found.memberId;
+
+
+              return (
+                lId &&
+                targetId &&
+                String(lId).toLowerCase() ===
+                String(targetId).toLowerCase()
+              );
+
+            })
+
+
+            .sort(function(a, b) {
+
+              return (
+                (a.timestamp || 0) -
+                (b.timestamp || 0)
+              );
+
+            })
+
+
+            .reverse();
+
+
+        const todayTotalLogCount = logs.length;
+
+        if (
+          userTodayLogs.length === 0
+        ) {
+
+          finalizeCheckIn(
+            found,
+            todayTotalLogCount
+          );
+
+        } else {
+
+          const lastCheckInTime =
+            userTodayLogs[0].timestamp;
+
+
+          const oneHourInMs =
+            60 *
+            60 *
+            1000;
+
+
+          if (
+            Date.now() -
+            lastCheckInTime <
+            oneHourInMs
+          ) {
+
+            triggerSecurityChallenge(
+              found
+            );
+
+          } else {
+
+            finalizeCheckIn(
+              found,
+              todayTotalLogCount
+            );
+
+          }
+
+        }
+
+      } catch (err) {
+
+        console.error(
+          "Check-in error:",
+          err
+        );
+
+
+        showAlertModal(
+          "Network Error",
+          "Failed to connect to gym backend server."
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // IDENTITY CHALLENGE
+    // =========================================================
+
+    function triggerSecurityChallenge(
+      member = {}
+    ) {
+
+      activeSecMember =
+        member;
+
+
+      let rawMI =
+        member.middleInitial ||
+        member.middle_initial ||
+        member.middleName ||
+        member.middle_name ||
+        "";
+
+
+      if (
+        !rawMI &&
+        member.name
+      ) {
+
+        const parts =
+          member.name
+            .trim()
+            .split(/\s+/);
+
+
+        if (
+          parts.length > 2
+        ) {
+
+          rawMI =
+            parts[1];
+
+        }
+
+      }
+
+
+      expectedAnswer =
+        String(rawMI)
+          .replace(
+            /[^a-zA-Z]/g,
+            ""
+          )
+          .charAt(0)
+          .toUpperCase();
+
+
+      const qEl =
+        document.getElementById(
+          "secQuestion"
+        );
+
+
+      const inputEl =
+        document.getElementById(
+          "securityInput"
+        );
+
+
+      const modalEl =
+        document.getElementById(
+          "securityModal"
+        );
+
+
+      const timerEl =
+        document.getElementById(
+          "secTimer"
+        );
+
+
+      if (qEl) {
+
+        qEl.innerText =
+          "Security: What is your Middle Initial?";
+
+      }
+
+
+      if (inputEl) {
+
+        inputEl.value =
+          "";
+
+      }
+
+
+      if (modalEl) {
+
+        modalEl.style.display =
+          "flex";
+
+      }
+
+
+      if (inputEl) {
+
+        setTimeout(
+          function() {
+
+            inputEl.focus();
+
+          },
+          100
+        );
+
+      }
+
+
+      let timeLeft =
+        30;
+
+
+      if (timerEl) {
+
+        timerEl.innerText =
+          timeLeft.toString();
+
+      }
+
+
+      if (secCountdown) {
+
+        clearInterval(
+          secCountdown
+        );
+
+      }
+
+
+      secCountdown =
+        setInterval(
+          function() {
+
+            timeLeft--;
+
+
+            if (timerEl) {
+
+              timerEl.innerText =
+                timeLeft.toString();
+
+            }
+
+
+            if (
+              timeLeft <= 0
+            ) {
+
+              clearInterval(
+                secCountdown
+              );
+
+
+              denyAccess(
+                "Verification Timeout"
+              );
+
+            }
+
+          },
+          1000
+        );
+
+    }
+
+
+    function validateSecurity() {
+
+      const inputEl =
+        document.getElementById(
+          "securityInput"
+        );
+
+
+      const rawInput =
+        inputEl
+          ? inputEl.value.trim()
+          : "";
+
+
+      const input =
+        String(rawInput)
+          .replace(
+            /[^a-zA-Z]/g,
+            ""
+          )
+          .charAt(0)
+          .toUpperCase();
+
+
+      if (secCountdown) {
+
+        clearInterval(
+          secCountdown
+        );
+
+      }
+
+
+      if (
+        expectedAnswer &&
+        input === expectedAnswer
+      ) {
+
+        const modalEl =
+          document.getElementById(
+            "securityModal"
+          );
+
+
+        if (modalEl) {
+
+          modalEl.style.display =
+            "none";
+
+        }
+
+
+        finalizeCheckIn(
+          activeSecMember,
+          1
+        );
+
+      } else {
+
+        denyAccess(
+          "Incorrect Middle Initial"
+        );
+
+      }
+
+    }
+
+
+    function cancelSecurity() {
+
+      if (secCountdown) {
+
+        clearInterval(
+          secCountdown
+        );
+
+      }
+
+
+      const modalEl =
+        document.getElementById(
+          "securityModal"
+        );
+
+
+      const inputEl =
+        document.getElementById(
+          "memberIdInput"
+        );
+
+
+      if (modalEl) {
+
+        modalEl.style.display =
+          "none";
+
+      }
+
+
+      activeSecMember =
+        null;
+
+
+      expectedAnswer =
+        null;
+
+
+      if (inputEl) {
+
+        inputEl.value =
+          "";
+
+      }
+
+    }
+
+
+    // =========================================================
+    // DENY ACCESS
+    // =========================================================
+
+    function denyAccess(
+      reason = ""
+    ) {
+
+      if (secCountdown) {
+
+        clearInterval(
+          secCountdown
+        );
+
+      }
+
+
+      const secModal =
+        document.getElementById(
+          "securityModal"
+        );
+
+
+      const reasonEl =
+        document.getElementById(
+          "failModalReason"
+        );
+
+
+      const timerEl =
+        document.getElementById(
+          "failModalTimerText"
+        );
+
+
+      const failModal =
+        document.getElementById(
+          "failModal"
+        );
+
+
+      if (secModal) {
+
+        secModal.style.display =
+          "none";
+
+      }
+
+
+      playBeep(
+        110,
+        0.6,
+        "square"
+      );
+
+
+      speakMessage(
+        "Access Denied"
+      );
+
+
+      const mId =
+        activeSecMember
+          ? (
+              activeSecMember.id ||
+              activeSecMember.memberId
+            )
+          : null;
+
+
+      if (mId) {
+
+        const unlockTime =
+          Date.now() +
+          (
+            60 *
+            60 *
+            1000
+          );
+
+
+        localStorage.setItem(
+          `lockout_${String(mId).toLowerCase()}`,
+          unlockTime.toString()
+        );
+
+      }
+
+
+      if (reasonEl) {
+
+        reasonEl.innerText =
+          `SECURITY DENIED: ${reason.toUpperCase()}`;
+
+      }
+
+
+      if (timerEl) {
+
+        timerEl.innerText =
+          "This profile is locked for 1 hour to prevent unauthorized QR sharing.";
+
+      }
+
+
+      if (failModal) {
+
+        failModal.style.display =
+          "flex";
+
+      }
+
+
+      activeSecMember =
+        null;
+
+
+      expectedAnswer =
+        null;
+
+    }
+
+
+    // =========================================================
+    // FINALIZE CHECK-IN
+    // =========================================================
+
+    async function finalizeCheckIn(
+      found = {},
+      totalLogsCount = 0
+    ) {
+
+      const today =
+        new Date();
+
+
+      today.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+
+      const expiryDateVal =
+        found.expiry ||
+        found.dateDue ||
+        found.date_due;
+
+
+      let expiry;
+
+
+      if (
+        typeof expiryDateVal ===
+          "string" &&
+        expiryDateVal.includes("-")
+      ) {
+
+        const parts =
+          expiryDateVal.split("-");
+
+
+        expiry =
+          new Date(
+            parseInt(
+              parts[0],
+              10
+            ),
+            parseInt(
+              parts[1],
+              10
+            ) - 1,
+            parseInt(
+              parts[2],
+              10
+            )
+          );
+
+      } else {
+
+        expiry =
+          new Date(
+            expiryDateVal
+          );
+
+      }
+
+
+      expiry.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+
+      const diffInDays =
+        Math.ceil(
+          (
+            expiry.getTime() -
+            today.getTime()
+          ) /
+          (
+            1000 *
+            3600 *
+            24
+          )
+        );
+
+
+      const modalName =
+        document.getElementById(
+          "modalName"
+        );
+
+
+      const modalPhoto =
+        document.getElementById(
+          "modalPhoto"
+        );
+
+
+      const modalExpiryDate =
+        document.getElementById(
+          "modalExpiryDate"
+        );
+
+
+      const statusText =
+        document.getElementById(
+          "modalExpiryText"
+        );
+
+
+      const confirmModal =
+        document.getElementById(
+          "confirmModal"
+        );
+
+
+      const resolvedName =
+        found.name ||
+        found.memberName ||
+        found.fullName ||
+        "---";
+
+
+      const resolvedId =
+        found.id ||
+        found.memberId ||
+        "";
+
+
+      if (modalName) {
+
+        modalName.innerText =
+          resolvedName;
+
+      }
+
+
+      if (modalPhoto) {
+
+        modalPhoto.src =
+          found.photo ||
+          "https://via.placeholder.com/150";
+
+      }
+
+
+      if (modalExpiryDate) {
+
+        modalExpiryDate.innerText =
+          expiryDateVal ||
+          "--/--/--";
+
+      }
+
+
+      if (statusText) {
+
+        if (
+          isNaN(diffInDays) ||
+          diffInDays < 0
+        ) {
+
+          playBeep(
+            110,
+            0.5,
+            "square"
+          );
+
+
+          speakMessage(
+            "Your membership has expired"
+          );
+
+
+          statusText.innerText =
+            "ACCESS DENIED: EXPIRED";
+
+
+          statusText.style.background =
+            "#dc3545";
+
+
+          statusText.style.color =
+            "#fff";
+
+        } else {
+
+          playBeep(
+            880,
+            0.3
+          );
+
+
+          const firstName =
+            resolvedName !== "---"
+              ? resolvedName.split(" ")[0]
+              : "Member";
+
+
+          speakMessage(
+            "Welcome " +
+            firstName
+          );
+
+
+          statusText.innerText =
+            `WELCOME! ${diffInDays} Days Left`;
+
+
+          statusText.style.background =
+            "#28a745";
+
+
+          statusText.style.color =
+            "#fff";
+
+
+          await saveLog(
+            resolvedId,
+            resolvedName,
+            diffInDays
+          );
+
+        }
+
+      }
+
+
+      if (confirmModal) {
+
+        confirmModal.style.display =
+          "flex";
+
+      }
+
+
+      // =========================================================
+      // AUTO DISMISS TIMING: 2.5s FOR MULTIPLE, 3s FOR SINGLE
+      // =========================================================
+
+      if (confirmTimer) {
+
+        clearTimeout(confirmTimer);
+
+      }
+
+
+      const popDuration =
+        totalLogsCount > 0
+          ? 2500
+          : 3000;
+
+
+      confirmTimer =
+        setTimeout(
+          function() {
+
+            closeModal();
+
+          },
+          popDuration
+        );
+
+    }
+
+
+    // =========================================================
+    // SAVE ATTENDANCE LOG
+    // =========================================================
+
+    async function saveLog(
+      id = "",
+      name = "",
+      days = 0
+    ) {
+
+      const now =
+        new Date();
+
+
+      const logEntry = {
+
+        memberId:
+          id,
+
+        name:
+          name,
+
+        timestamp:
+          now.getTime(),
+
+        date:
+          now.toISOString()
+            .split("T")[0],
+
+        time:
+          now.toLocaleTimeString(
+            [],
+            {
+              hour:
+                "2-digit",
+
+              minute:
+                "2-digit"
+            }
+          ),
+
+        daysLeft:
+          days
+
+      };
+
+
+      try {
+
+        await fetch(
+          `${API_BASE}/attendance`,
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify(
+                logEntry
+              )
+
+          }
+        );
+
+
+        updateTable();
+
+      } catch (err) {
+
+        console.error(
+          "Failed to post log:",
+          err
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // MASK MEMBER NAME
+    // =========================================================
+
+    function maskName(
+      fullName = ""
+    ) {
+
+      if (!fullName) {
+
+        return "---";
+
+      }
+
+
+      const parts =
+        fullName
+          .trim()
+          .split(/\s+/);
+
+
+      if (
+        parts.length < 2
+      ) {
+
+        return escapeHtml(
+          fullName
+        );
+
+      }
+
+
+      const firstName =
+        parts[0];
+
+
+      const lastName =
+        parts[
+          parts.length - 1
+        ];
+
+
+      const maskedLastName =
+        lastName.charAt(0) +
+        "*".repeat(
+          Math.max(
+            0,
+            lastName.length - 1
+          )
+        );
+
+
+      if (
+        parts.length > 2
+      ) {
+
+        return escapeHtml(
+          `${firstName} ${
+            parts
+              .slice(1, -1)
+              .map(
+                p =>
+                  "*".repeat(
+                    p.length
+                  )
+              )
+              .join(" ")
+          } ${maskedLastName}`
+        );
+
+      }
+
+
+      return escapeHtml(
+        `${firstName} ${maskedLastName}`
+      );
+
+    }
+
+
+    // =========================================================
+    // UPDATE ATTENDANCE TABLE
+    // =========================================================
+
+    async function updateTable() {
+
+      try {
+
+        const today =
+          new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+        const res =
+          await fetch(
+            `${API_BASE}/attendance?date=${today}`
+          );
+
+
+        const todaysLogs =
+          res.ok
+            ? await res.json()
+            : [];
+
+
+        todaysLogs.sort(
+          (a, b) =>
+            (b.timestamp || 0) -
+            (a.timestamp || 0)
+        );
+
+
+        const tbody =
+          document.getElementById(
+            "checkinTableBody"
+          );
+
+
+        if (tbody) {
+
+          if (
+            todaysLogs.length === 0
+          ) {
+
+            tbody.innerHTML = `
+
+              <tr>
+
+                <td
+                  colspan="3"
+                  style="
+                    text-align:center;
+                    color:#999;
+                    padding:30px;
+                  "
+                >
+                  Waiting for first check-in...
+                </td>
+
+              </tr>
+
+            `;
+
+          } else {
+
+            tbody.innerHTML =
+              todaysLogs
+
+                .map(
+                  function(
+                    l,
+                    index
+                  ) {
+
+                    const displayName =
+                      l.name ||
+                      l.memberName ||
+                      l.fullName ||
+                      "Member";
+
+
+                    const displayDays =
+                      typeof l.daysLeft ===
+                        "number"
+
+                        ? l.daysLeft
+
+                        : parseInt(
+                            l.daysLeft ||
+                              0,
+                            10
+                          );
+
+
+                    const safeDays =
+                      isNaN(
+                        displayDays
+                      )
+                        ? 0
+                        : displayDays;
+
+
+                    const rowStyle =
+                      index === 0
+
+                        ? "style='background:#fffde7; border-left:5px solid #ffcc00; font-weight:500;'"
+
+                        : "";
+
+
+                    const statusColor =
+                      safeDays <= 2
+
+                        ? "#dc3545"
+
+                        : "#28a745";
+
+
+                    const statusText =
+                      safeDays <= 0
+
+                        ? "EXPIRED"
+
+                        : `${safeDays} Days`;
+
+
+                    return `
+
+                      <tr ${rowStyle}>
+
+                        <td>
+                          ${maskName(
+                            displayName
+                          )}
+                        </td>
+
+                        <td>
+                          ${escapeHtml(
+                            l.time || ""
+                          )}
+                        </td>
+
+                        <td
+                          style="
+                            color:${statusColor};
+                            font-weight:bold;
+                          "
+                        >
+                          ${escapeHtml(
+                            statusText
+                          )}
+                        </td>
+
+                      </tr>
+
+                    `;
+
+                  }
+                )
+
+                .join("");
+
+          }
+
+        }
+
+      } catch (err) {
+
+        console.error(
+          "Failed to load today's attendance logs:",
+          err
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // CLOSE CONFIRM MODAL
+    // =========================================================
+
+    function closeModal() {
+
+      if (confirmTimer) {
+
+        clearTimeout(confirmTimer);
+
+        confirmTimer = null;
+
+      }
+
+
+      const modal =
+        document.getElementById(
+          "confirmModal"
+        );
+
+
+      const input =
+        document.getElementById(
+          "memberIdInput"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "none";
+
+      }
+
+
+      if (input) {
+
+        input.value =
+          "";
+
+        input.blur();
+
+        input.setAttribute('readonly', 'readonly');
+
+      }
+
+    }
+
+
+    // =========================================================
+    // CLOSE FAIL MODAL
+    // =========================================================
+
+    function closeFailModal() {
+
+      const modal =
+        document.getElementById(
+          "failModal"
+        );
+
+
+      const input =
+        document.getElementById(
+          "memberIdInput"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "none";
+
+      }
+
+
+      if (input) {
+
+        input.value =
+          "";
+
+        input.blur();
+
+        input.setAttribute('readonly', 'readonly');
+
+      }
+
+    }
+
+
+    // =========================================================
+    // ADMIN MODAL
+    // =========================================================
+
+    function openAdminModal() {
+
+      const modal =
+        document.getElementById(
+          "adminModal"
+        );
+
+
+      const input =
+        document.getElementById(
+          "adminPass"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "flex";
+
+      }
+
+
+      if (input) {
+
+        input.focus();
+
+      }
+
+    }
+
+
+    function closeAdminModal() {
+
+      const modal =
+        document.getElementById(
+          "adminModal"
+        );
+
+
+      const input =
+        document.getElementById(
+          "adminPass"
+        );
+
+
+      if (modal) {
+
+        modal.style.display =
+          "none";
+
+      }
+
+
+      if (input) {
+
+        input.value =
+          "";
+
+      }
+
+    }
+
+
+    // =========================================================
+    // ADMIN LOGIN
+    // =========================================================
+
+    async function checkAdmin() {
+
+      const passEl =
+        document.getElementById(
+          "adminPass"
+        );
+
+
+      const submitBtn =
+        document.getElementById(
+          "adminSubmitBtn"
+        );
+
+
+      const password =
+        passEl
+          ? passEl.value
+          : "";
+
+
+      if (!password) {
+
+        showAlertModal(
+          "Required",
+          "Please enter administrator password.",
+          "fa-lock"
+        );
+
+
+        return;
+
+      }
+
+
+      if (submitBtn) {
+
+        submitBtn.disabled =
+          true;
+
+        submitBtn.innerText =
+          "VERIFYING...";
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_BASE}/admin/login`,
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+                  password
+                })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.ok &&
+          data.success
+        ) {
+
+          localStorage.setItem(
+            "isLoggedIn",
+            "true"
+          );
+
+
+          window.location.href =
+            "home.html";
+
+        } else {
+
+          playBeep(
+            110,
+            0.4,
+            "square"
+          );
+
+
+          speakMessage(
+            "Access Denied. Incorrect Password."
+          );
+
+
+          closeAdminModal();
+
+
+          showAdminErrorModal();
+
+        }
+
+      } catch (err) {
+
+        console.error(
+          "Admin Login Error:",
+          err
+        );
+
+
+        showAlertModal(
+          "Server Error",
+          "Unable to reach the authentication server.",
+          "fa-exclamation-triangle"
+        );
+
+      } finally {
+
+        if (submitBtn) {
+
+          submitBtn.disabled =
+            false;
+
+          submitBtn.innerText =
+            "LOGIN";
+
+        }
+
+      }
+
+    }
+
+  </script>
+
+</body>
+
+</html>

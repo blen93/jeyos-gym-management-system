@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Active Status - Jeyo's Hardhit</title>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/status.css" />
+
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Main JavaScript -->
+  <script src="js/script.js"></script>
+
+  <!-- Authentication Check -->
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      background: #f8f9fa;
+      padding-bottom: 90px;
+      color: #333;
+    }
+
+    /* ==============================
+       HEADER
+    ============================== */
+
+    header {
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .header-title {
+      font-family: "Oswald", sans-serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ==============================
+       MAIN CONTAINER
+    ============================== */
+
+    .status-container {
+      padding: 1.2rem;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    /* ==============================
+       SEARCH
+    ============================== */
+
+    .search-box {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .search-box:focus {
+      border-color: #ffcc00;
+    }
+
+    /* ==============================
+       STATUS CARDS
+    ============================== */
+
+    .status-card {
+      background: white;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #eee;
+      border-left: 8px solid #28a745;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .status-card:active {
+      transform: scale(0.98);
+    }
+
+    .status-card:hover {
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    }
+
+    .member-card-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #eee;
+      flex-shrink: 0;
+    }
+
+    .member-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .member-card-id {
+      font-size: 0.75rem;
+      color: #888;
+      font-weight: bold;
+      margin: 0 0 2px 0;
+    }
+
+    .member-card-name {
+      font-family: "Oswald", sans-serif;
+      font-size: 1.1rem;
+      margin: 0;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==============================
+       DAYS BADGE
+    ============================== */
+
+    .days-badge {
+      background: #1a1a1a;
+      color: #ffcc00;
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: "Oswald", sans-serif;
+      flex-shrink: 0;
+    }
+
+    .days-num {
+      font-size: 1.3rem;
+      line-height: 1;
+      font-weight: bold;
+    }
+
+    .days-label {
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      margin-top: 2px;
+      color: #b5b5b5;
+    }
+
+    /* ==============================
+       WARNING / EXPIRED
+    ============================== */
+
+    .status-card.warning { border-left-color: #ff9800; }
+    .status-card.warning .days-badge { background: #ff9800; color: white; }
+    .status-card.warning .days-label { color: #fff; }
+
+    .status-card.danger { border-left-color: #dc3545; }
+    .status-card.danger .days-badge { background: #dc3545; color: white; }
+    .status-card.danger .days-label { color: #fff; }
+
+    /* ==============================
+       MODALS
+    ============================== */
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 90%;
+      max-width: 360px;
+      border-radius: 25px;
+      padding: 25px;
+      text-align: center;
+      border-top: 6px solid #ffcc00;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    #qrPassModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 3000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    #modalQR {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+
+    .foot-link {
+      text-decoration: none;
+      color: #999;
+      font-size: 0.7rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .foot-link i {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .foot-link.active {
+      color: #ffcc00;
+    }
+
+    .status-message { text-align: center; color: #999; margin-top: 30px; }
+    .status-error { text-align: center; color: #dc3545; margin-top: 30px; }
+
+    /* ==============================
+       UPDATED PRINT STYLES
+    ============================== */
+
+    @media print {
+      @page {
+        margin: 0;
+        size: auto;
+      }
+
+      /* Hide everything on the page including floating buttons */
+      body * {
+        visibility: hidden !important;
+      }
+
+      /* Make only the QR modal container and its contents visible */
+      #qrPassModal, #qrPassModal * {
+        visibility: visible !important;
+      }
+
+      /* Position the print output cleanly */
+      #qrPassModal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px 0 !important;
+      }
+
+      /* Hide modal title and print/close buttons during printing */
+      #qrModalTitle, 
+      .modal-btns-group {
+        display: none !important;
+      }
+
+      /* Clean styling for QR image */
+      #modalQR {
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+        box-shadow: none !important;
+      }
+
+      #modalQR img,
+      #modalQR canvas {
+        display: block !important;
+        margin: 0 auto !important;
+        max-width: 220px !important;
+        height: auto !important;
+      }
+
+      /* Format member ID text clearly for printing */
+      #modalIDText {
+        color: #000 !important;
+        font-size: 2rem !important;
+        font-weight: bold !important;
+        margin: 10px 0 0 0 !important;
+        text-align: center !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-title">ACTIVE STATUS</div>
+  </header>
+
+  <main class="status-container">
+    <input
+      type="text"
+      id="memberSearch"
+      class="search-box"
+      placeholder="Search Name or ID..."
+      autocomplete="off"
+    />
+    <div id="statusList"></div>
+  </main>
+
+  <!-- MEMBER DETAILS MODAL -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <div id="fullPhotoArea">
+        <img
+          id="fullPhoto"
+          src=""
+          alt="Member Photo"
+          style="
+            width:100px;
+            height:100px;
+            border-radius:15px;
+            border:3px solid #ffcc00;
+            object-fit:cover;
+          "
+        />
+
+        <h2
+          id="fullName"
+          style="
+            font-family:'Oswald';
+            margin:10px 0 0;
+            text-transform:uppercase;
+          "
+        >
+          NAME
+        </h2>
+
+        <p
+          id="fullID"
+          style="
+            color:#888;
+            font-weight:bold;
+            margin-bottom:15px;
+          "
+        >
+          ID: 000
+        </p>
+
+        <!-- CLICKABLE QR CODE CONTAINER -->
+        <div
+          id="qrcode"
+          title="Tap to enlarge / print"
+          style="
+            margin-bottom:15px;
+            display:flex;
+            justify-content:center;
+            cursor:pointer;
+          "
+        ></div>
+        <p style="font-size: 0.75rem; color: #888; margin-top: -10px; margin-bottom: 15px;">Tap QR to enlarge / print</p>
+
+        <div
+          style="
+            background:#f9f9f9;
+            padding:15px;
+            border-radius:15px;
+            text-align:left;
+            margin-bottom:20px;
+          "
+        >
+          <p style="margin:4px 0;">
+            <b>Expiry:</b>
+            <span id="fullExpiry">--</span>
+          </p>
+
+          <p style="margin:4px 0;">
+            <b>Remaining:</b>
+            <span id="fullDaysRem">--</span>
+          </p>
+        </div>
+      </div>
+
+      <button
+        id="closeModalButton"
+        type="button"
+        style="
+          width:100%;
+          padding:15px;
+          background:#333;
+          color:#ffcc00;
+          border:none;
+          border-radius:12px;
+          font-family:'Oswald';
+          cursor:pointer;
+          font-size:1rem;
+        "
+      >
+        CLOSE RECORD
+      </button>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN MEMBER PASS / PRINT MODAL -->
+  <div id="qrPassModal">
+    <h2 id="qrModalTitle" style="font-family:'Oswald'; letter-spacing: 2px;">MEMBER PASS</h2>
+    <div id="modalQR"></div>
+    <div id="modalIDText" style="font-size: 1.8rem; font-weight: bold; margin-bottom: 25px; font-family:'Oswald'; color:#ffcc00;"></div>
+    <div class="modal-btns-group" style="display:flex; gap:15px;">
+      <button onclick="window.print()" style="padding:15px 30px; background:#ffcc00; border:none; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Oswald';">PRINT</button>
+      <button onclick="closeQrPassModal()" style="padding:15px 30px; background:#444; color:white; border:none; border-radius:12px; cursor:pointer; font-family:'Oswald';">CLOSE</button>
+    </div>
+  </div>
+
+  <footer>
+    <a href="home.html" class="foot-link">
+      <i class="fa-solid fa-calendar-check"></i>
+      <span>Logs</span>
+    </a>
+    <a href="register.html" class="foot-link">
+      <i class="fa-solid fa-user-plus"></i>
+      <span>Register</span>
+    </a>
+    <a href="renew.html" class="foot-link">
+      <i class="fa-solid fa-rotate-right"></i>
+      <span>Renew</span>
+    </a>
+    <a href="members.html" class="foot-link">
+      <i class="fa-solid fa-users"></i>
+      <span>Members</span>
+    </a>
+    <a href="status.html" class="foot-link active">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Status</span>
+    </a>
+  </footer>
+
+  <script>
+    /** @type {Member[]} */
+    let membersList = [];
+    let activeSelectedID = "";
+
+    const memberSearch = document.getElementById("memberSearch");
+    const statusList = document.getElementById("statusList");
+    const infoModal = document.getElementById("infoModal");
+    const closeModalButton = document.getElementById("closeModalButton");
+    const qrPassModal = document.getElementById("qrPassModal");
+    const qrcodeContainer = document.getElementById("qrcode");
+
+    function normalizeId(value) {
+      if (value === null || value === undefined) return "";
+      return String(value).toLowerCase().replace(/[\s-]/g, "").trim();
+    }
+
+    function getMemberId(member) {
+      return String(member.id || member.memberId || member.member_id || "").trim();
+    }
+
+    function getExpiryDate(member) {
+      return member.expiry || member.dateDue || member.date_due || member.datedue || null;
+    }
+
+    function parseLocalDate(dateString) {
+      if (!dateString) return null;
+      let value = String(dateString).trim();
+      if (!value) return null;
+      if (value.includes("T")) value = value.split("T")[0];
+
+      const isoMatch = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (isoMatch) {
+        const date = new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+        date.setHours(0, 0, 0, 0);
+        return isNaN(date.getTime()) ? null : date;
+      }
+
+      const slashMatch = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (slashMatch) {
+        const date = new Date(Number(slashMatch[3]), Number(slashMatch[1]) - 1, Number(slashMatch[2]));
+        date.setHours(0, 0, 0, 0);
+        return isNaN(date.getTime()) ? null : date;
+      }
+
+      const fallbackDate = new Date(value);
+      if (isNaN(fallbackDate.getTime())) return null;
+      fallbackDate.setHours(0, 0, 0, 0);
+      return fallbackDate;
+    }
+
+    function calculateDaysRemaining(dateString) {
+      const target = parseLocalDate(dateString);
+      if (!target) return -1;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    function formatDisplayDate(dateString) {
+      if (!dateString || dateString === "---") return "---";
+      const date = parseLocalDate(dateString);
+      if (!date) return String(dateString);
+      return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement("div");
+      div.textContent = value === null || value === undefined ? "" : String(value);
+      return div.innerHTML;
+    }
+
+    async function fetchMembers() {
+      try {
+        const response = await fetch("/api/members");
+        if (!response.ok) throw new Error(`Server returned ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error("Invalid members data received from server.");
+        membersList = data;
+        loadStatus();
+      } catch (error) {
+        console.error("Error fetching members:", error);
+        statusList.innerHTML = `<p class="status-error">Failed to load members from server.</p>`;
+      }
+    }
+
+    function loadStatus() {
+      const query = memberSearch.value.toLowerCase().trim();
+      let filteredMembers = membersList.filter(function (member) {
+        const name = String(member.name || "").toLowerCase();
+        const id = getMemberId(member).toLowerCase();
+        return name.includes(query) || id.includes(query);
+      });
+
+      filteredMembers.sort(function (a, b) {
+        const aDate = parseLocalDate(getExpiryDate(a));
+        const bDate = parseLocalDate(getExpiryDate(b));
+        const aTime = aDate ? aDate.getTime() : Number.POSITIVE_INFINITY;
+        const bTime = bDate ? bDate.getTime() : Number.POSITIVE_INFINITY;
+        return aTime - bTime;
+      });
+
+      if (filteredMembers.length === 0) {
+        statusList.innerHTML = `<p class="status-message">No members found.</p>`;
+        return;
+      }
+
+      statusList.innerHTML = filteredMembers.map(function (member) {
+        const memberId = getMemberId(member);
+        const memberName = String(member.name || "Unnamed Member");
+        const targetExpiry = getExpiryDate(member);
+        const diffInDays = calculateDaysRemaining(targetExpiry);
+
+        let statusClass = "";
+        let badgeText = String(diffInDays);
+        let labelText = "Days Left";
+
+        if (!targetExpiry || diffInDays < 0) {
+          statusClass = "danger";
+          badgeText = "EXP";
+          labelText = "Expired";
+        } else if (diffInDays <= 7) {
+          statusClass = "warning";
+        }
+
+        const safeId = escapeHtml(memberId);
+        const safeName = escapeHtml(memberName);
+        const safePhoto = escapeHtml(member.photo || "https://via.placeholder.com/55");
+        const safeExpiry = escapeHtml(formatDisplayDate(targetExpiry));
+
+        return `
+          <div class="status-card ${statusClass}" data-member-id="${safeId}" role="button" tabindex="0">
+            <img src="${safePhoto}" class="member-card-img" alt="Member Photo" onerror="this.src='https://via.placeholder.com/55';" />
+            <div class="member-info">
+              <p class="member-card-id">${safeId}</p>
+              <h3 class="member-card-name">${safeName}</h3>
+              <p style="font-size:0.75rem; color:#666; margin:4px 0 0 0;">Expires: ${safeExpiry}</p>
+            </div>
+            <div class="days-badge">
+              <span class="days-num">${escapeHtml(badgeText)}</span>
+              <span class="days-label">${escapeHtml(labelText)}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const cards = statusList.querySelectorAll(".status-card");
+      cards.forEach(function (card) {
+        card.addEventListener("click", function () {
+          const id = card.getAttribute("data-member-id");
+          if (id) fetchAndShowMember(id);
+        });
+        card.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const id = card.getAttribute("data-member-id");
+            if (id) fetchAndShowMember(id);
+          }
+        });
+      });
+    }
+
+    function fetchAndShowMember(id) {
+      const searchId = normalizeId(id);
+      const member = membersList.find(function (currentMember) {
+        return normalizeId(getMemberId(currentMember)) === searchId;
+      });
+      if (member) showDetails(member);
+    }
+
+    function showDetails(member) {
+      const targetExpiry = getExpiryDate(member);
+      const diffInDays = calculateDaysRemaining(targetExpiry);
+      const memberName = member.name || "Unnamed Member";
+      activeSelectedID = getMemberId(member);
+
+      document.getElementById("fullName").textContent = memberName;
+      document.getElementById("fullID").textContent = `ID: ${activeSelectedID}`;
+      document.getElementById("fullExpiry").textContent = formatDisplayDate(targetExpiry);
+
+      const daysRemLabel = document.getElementById("fullDaysRem");
+      if (!targetExpiry || diffInDays < 0) {
+        daysRemLabel.textContent = "Expired Account";
+        daysRemLabel.style.color = "#dc3545";
+      } else {
+        daysRemLabel.textContent = `${diffInDays} Days Remaining`;
+        daysRemLabel.style.color = diffInDays <= 7 ? "#ff9800" : "#28a745";
+      }
+
+      const fullPhoto = document.getElementById("fullPhoto");
+      fullPhoto.src = member.photo || "https://via.placeholder.com/100";
+      fullPhoto.onerror = function () { fullPhoto.src = "https://via.placeholder.com/100"; };
+
+      qrcodeContainer.innerHTML = "";
+      if (typeof QRCode !== "undefined" && activeSelectedID) {
+        new QRCode(qrcodeContainer, { text: activeSelectedID, width: 120, height: 120 });
+      } else {
+        qrcodeContainer.innerHTML = `<p style="color:#dc3545;">QR code unavailable</p>`;
+      }
+
+      infoModal.style.display = "flex";
+    }
+
+    function openQrPassModal() {
+      if (!activeSelectedID) return;
+      document.getElementById("modalIDText").innerText = activeSelectedID;
+      document.getElementById("modalQR").innerHTML = "";
+      new QRCode(document.getElementById("modalQR"), { text: activeSelectedID, width: 200, height: 200 });
+      qrPassModal.style.display = "flex";
+    }
+
+    function closeQrPassModal() {
+      qrPassModal.style.display = "none";
+    }
+
+    function closeModal() {
+      infoModal.style.display = "none";
+    }
+
+    qrcodeContainer.addEventListener("click", openQrPassModal);
+    memberSearch.addEventListener("input", loadStatus);
+    closeModalButton.addEventListener("click", closeModal);
+
+    infoModal.addEventListener("click", function (event) {
+      if (event.target === infoModal) closeModal();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        if (qrPassModal.style.display === "flex") {
+          closeQrPassModal();
+        } else if (infoModal.style.display === "flex") {
+          closeModal();
+        }
+      }
+    });
+
+    fetchMembers();
+  </script>
+</body>
+</html>

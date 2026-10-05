@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Renew Membership - Jeyo's Hardhit</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/status.css">
+
+  <script src="js/script.js"></script>
+
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding-bottom: 90px;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(
+        135deg,
+        #ffcc00 0%,
+        #ffb300 100%
+      );
+
+      padding: 0.8rem 1.2rem;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      position: sticky;
+      top: 0;
+
+      z-index: 1001;
+
+      box-shadow:
+        0 4px 15px rgba(0,0,0,0.15);
+
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .header-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* SUCCESS MODAL */
+
+    .modal-overlay {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      background: rgba(0,0,0,0.7);
+
+      display: none;
+
+      justify-content: center;
+      align-items: center;
+
+      z-index: 4000;
+
+      opacity: 0;
+
+      transition:
+        opacity 0.3s ease;
+
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: white;
+
+      padding: 30px 20px;
+
+      border-radius: 25px;
+
+      width: 85%;
+      max-width: 320px;
+
+      text-align: center;
+
+      transform: translateY(30px);
+
+      transition:
+        transform 0.3s
+        cubic-bezier(
+          0.175,
+          0.885,
+          0.32,
+          1.275
+        );
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      color: #ffcc00;
+      margin-bottom: 15px;
+    }
+
+    .success-icon {
+      color: #28a745;
+    }
+
+    .modal-card h3 {
+      font-family: 'Oswald', sans-serif;
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .modal-card p {
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .m-btn {
+      flex: 1;
+
+      padding: 14px;
+
+      border-radius: 12px;
+
+      border: none;
+
+      font-family: 'Oswald', sans-serif;
+
+      cursor: pointer;
+
+      font-size: 1rem;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1px;
+    }
+
+    .btn-yes {
+      background: #1a1a1a;
+      color: #ffcc00;
+
+      box-shadow:
+        0 4px 0 #000;
+    }
+
+    .btn-yes:active {
+      transform: translateY(2px);
+
+      box-shadow:
+        0 2px 0 #000;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* SEARCH */
+
+    .search-container {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .search-input {
+      width: 100%;
+
+      padding: 15px 45px 15px 15px;
+
+      border-radius: 12px;
+
+      border: 2px solid #eee;
+
+      background: #f9f9f9;
+
+      color: #333;
+
+      font-size: 1rem;
+
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #ffcc00;
+      background: #fff;
+    }
+
+    .search-container i {
+      position: absolute;
+
+      right: 15px;
+      top: 18px;
+
+      color: #888;
+    }
+
+    .section-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 15px 0 8px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* RESULTS */
+
+    #resultsList {
+      margin-bottom: 20px;
+
+      max-height: 380px;
+
+      overflow-y: auto;
+    }
+
+    .result-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 10px;
+
+      background: #fff;
+
+      border: 1px solid #eee;
+
+      border-radius: 10px;
+
+      margin-bottom: 8px;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .result-item:active {
+      background: #fffdf0;
+      transform: scale(0.98);
+    }
+
+    .result-photo {
+      width: 45px;
+      height: 45px;
+
+      border-radius: 8px;
+
+      object-fit: cover;
+
+      flex-shrink: 0;
+    }
+
+    .result-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .result-info h4 {
+      margin: 0;
+
+      font-size: 0.95rem;
+
+      text-transform: uppercase;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+    }
+
+    .result-info p {
+      margin: 0;
+
+      font-size: 0.75rem;
+
+      color: #777;
+    }
+
+    /* MEMBER PREVIEW */
+
+    #memberPreview {
+      background: #fff;
+
+      border-radius: 15px;
+
+      padding: 20px;
+
+      display: none;
+
+      border: 1px solid #eee;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+
+      animation:
+        slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .preview-header {
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 15px;
+    }
+
+    .preview-photo {
+      width: 70px;
+      height: 70px;
+
+      border-radius: 12px;
+
+      object-fit: cover;
+
+      border: 2px solid #ffcc00;
+
+      flex-shrink: 0;
+    }
+
+    .preview-info {
+      min-width: 0;
+    }
+
+    .preview-info h2 {
+      margin: 0;
+
+      font-family: 'Oswald', sans-serif;
+
+      color: #000;
+
+      text-transform: uppercase;
+
+      font-size: 1.3rem;
+    }
+
+    .preview-info p {
+      margin: 2px 0;
+
+      color: #666;
+
+      font-size: 0.9rem;
+    }
+
+    .expiry-row {
+      display: flex;
+
+      justify-content: space-between;
+
+      background: #fdf8e4;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      margin-top: 10px;
+
+      border: 1px solid #faeeba;
+    }
+
+    .expiry-row div {
+      text-align: center;
+      flex: 1;
+    }
+
+    .expiry-row label {
+      display: block;
+
+      font-size: 0.65rem;
+
+      text-transform: uppercase;
+
+      color: #8a7b3e;
+
+      font-weight: bold;
+    }
+
+    .expiry-row span {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    /* FORM */
+
+    .renewal-form {
+      background: #fff;
+
+      padding: 20px;
+
+      border-radius: 15px;
+
+      display: none;
+
+      border: 1px solid #eee;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+
+      font-size: 0.75rem;
+
+      color: #777;
+
+      margin-bottom: 6px;
+
+      font-weight: bold;
+
+      text-transform: uppercase;
+    }
+
+    .form-group input {
+      width: 100%;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      border: 1px solid #ddd;
+
+      outline: none;
+
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      border-color: #ffcc00;
+    }
+
+    /* =========================================================
+       FORM ACTION BUTTONS (CONFIRM RENEWAL & CANCEL)
+    ========================================================= */
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 1.2rem;
+    }
+
+    .btn-renew {
+      flex: 1.2;
+
+      background:
+        linear-gradient(
+          180deg,
+          #333 0%,
+          #1a1a1a 100%
+        );
+
+      color: #ffcc00;
+
+      border: none;
+
+      padding: 0.8rem 0.4rem;
+
+      border-radius: 10px;
+
+      font-family: 'Oswald', sans-serif;
+
+      font-size: 1rem;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 3px 0 #000;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.5px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 6px;
+
+      transition: transform 0.1s ease;
+    }
+
+    .btn-cancel {
+      flex: 0.8;
+
+      background: #e0e0e0;
+
+      color: #555;
+
+      border: none;
+
+      padding: 0.8rem 0.4rem;
+
+      border-radius: 10px;
+
+      font-family: 'Oswald', sans-serif;
+
+      font-size: 1rem;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 3px 0 #bbb;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.5px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 6px;
+
+      transition: transform 0.1s ease;
+    }
+
+    .btn-renew:active,
+    .btn-cancel:active {
+      transform: translateY(2px);
+
+      box-shadow:
+        0 1px 0 transparent;
+    }
+
+    .btn-renew:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    footer {
+      position: fixed;
+
+      bottom: 0;
+
+      width: 100%;
+
+      background: #fff;
+
+      border-top: 1px solid #eee;
+
+      display: flex;
+
+      justify-content: space-around;
+
+      padding: 12px 0;
+
+      z-index: 1000;
+    }
+
+    .foot-link {
+      text-decoration: none;
+
+      color: #999;
+
+      font-size: 0.7rem;
+
+      text-align: center;
+
+      flex: 1;
+    }
+
+    .foot-link i {
+      font-size: 1.4rem;
+
+      display: block;
+
+      margin-bottom: 4px;
+    }
+
+    .foot-link.active {
+      color: #ffcc00;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <div class="header-title">
+    RENEW MEMBERSHIP
+  </div>
+</header>
+
+<!-- SUCCESS MODAL -->
+
+<div
+  class="modal-overlay"
+  id="successModal"
+>
+
+  <div class="modal-card">
+
+    <i
+      class="fa-solid fa-circle-check modal-icon success-icon"
+    ></i>
+
+    <h3>UPDATED!</h3>
+
+    <p id="successMsg">
+      Membership has been successfully renewed.
+    </p>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-yes"
+        id="doneButton"
+      >
+        DONE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="container">
+
+  <!-- SEARCH -->
+
+  <div class="search-container">
+
+    <input
+      type="text"
+      id="renewSearch"
+      class="search-input"
+      placeholder="Type Name or ID..."
+      autocomplete="off"
+    >
+
+    <i class="fa-solid fa-magnifying-glass"></i>
+
+  </div>
+
+  <div id="sectionTitle" class="section-label">
+    <i class="fa-solid fa-clock-rotate-left"></i> Expired Memberships
+  </div>
+
+  <div id="resultsList"></div>
+
+  <!-- MEMBER PREVIEW -->
+
+  <div id="memberPreview">
+
+    <div class="preview-header">
+
+      <img
+        src=""
+        id="prevPhoto"
+        class="preview-photo"
+        alt="Member Photo"
+      >
+
+      <div class="preview-info">
+
+        <h2 id="prevName">
+          ---
+        </h2>
+
+        <p id="prevID">
+          ID: ---
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="expiry-row">
+
+      <div>
+
+        <label>Status</label>
+
+        <span id="prevStatus">
+          ---
+        </span>
+
+      </div>
+
+      <div>
+
+        <label>Current Expiry</label>
+
+        <span id="prevExpiry">
+          ---
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RENEWAL FORM -->
+
+  <div
+    id="renewalForm"
+    class="renewal-form"
+  >
+
+    <div class="form-group">
+
+      <label>
+        New Start Date
+      </label>
+
+      <input
+        type="date"
+        id="newStart"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        New Expiry Date
+      </label>
+
+      <input
+        type="date"
+        id="newExpiry"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Renewal Fee (₱)
+      </label>
+
+      <input
+        type="number"
+        id="payAmount"
+        value="400"
+        min="0"
+      >
+
+    </div>
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="btn-renew"
+        id="renewButton"
+      >
+        <i class="fa-solid fa-rotate-right"></i> CONFIRM
+      </button>
+
+      <button
+        type="button"
+        class="btn-cancel"
+        id="cancelButton"
+        onclick="handleRenewalCancel()"
+      >
+        <i class="fas fa-xmark"></i> CANCEL
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+
+  <a
+    href="home.html"
+    class="foot-link"
+  >
+    <i class="fa-solid fa-calendar-check"></i>
+    <span>Logs</span>
+  </a>
+
+  <a
+    href="register.html"
+    class="foot-link"
+  >
+    <i class="fa-solid fa-user-plus"></i>
+    <span>Register</span>
+  </a>
+
+  <a
+    href="renew.html"
+    class="foot-link active"
+  >
+    <i class="fa-solid fa-rotate-right"></i>
+    <span>Renew</span>
+  </a>
+
+  <a
+    href="members.html"
+    class="foot-link"
+  >
+    <i class="fa-solid fa-users"></i>
+    <span>Members</span>
+  </a>
+
+  <a
+    href="status.html"
+    class="foot-link"
+  >
+    <i class="fa-solid fa-circle-info"></i>
+    <span>Status</span>
+  </a>
+
+</footer>
+
+<script>
+
+  /**
+   * @typedef {Object} Member
+   * @property {string} [id]
+   * @property {string} [memberId]
+   * @property {string} [member_id]
+   * @property {string} [name]
+   * @property {string} [photo]
+   * @property {string} [expiry]
+   * @property {string} [dateDue]
+   * @property {string} [date_due]
+   * @property {string} [datedue]
+   * @property {string} [status]
+   * @property {string} [startDate]
+   * @property {string} [dateStarted]
+   * @property {number|string} [amount]
+   */
+
+  /** @type {Member|null} */
+  let selectedMember = null;
+
+  /** @type {Member[]} */
+  let allMembers = [];
+
+  /**
+   * Get expiry date.
+   * @param {Member} member
+   * @returns {string|null}
+   */
+  function getExpiryDate(member) {
+
+    return (
+      member.expiry ??
+      member.dateDue ??
+      member.date_due ??
+      member.datedue ??
+      null
+    );
+  }
+
+  /**
+   * Parse local date.
+   * @param {string|null} dateString
+   * @returns {Date|null}
+   */
+  function parseLocalDate(dateString) {
+
+    if (!dateString) {
+      return null;
+    }
+
+    const value =
+      String(dateString)
+        .split('T')[0];
+
+    const parts =
+      value.split(/[-/]/);
+
+    if (parts.length === 3) {
+
+      if (parts[0].length === 4) {
+
+        const date = new Date(
+          Number(parts[0]),
+          Number(parts[1]) - 1,
+          Number(parts[2])
+        );
+
+        if (!Number.isNaN(date.getTime())) {
+          return date;
+        }
+      }
+
+      if (parts[2].length === 4) {
+
+        const date = new Date(
+          Number(parts[2]),
+          Number(parts[0]) - 1,
+          Number(parts[1])
+        );
+
+        if (!Number.isNaN(date.getTime())) {
+          return date;
+        }
+      }
+    }
+
+    const fallback =
+      new Date(value);
+
+    return Number.isNaN(
+      fallback.getTime()
+    )
+      ? null
+      : fallback;
+  }
+
+  /**
+   * Format date.
+   * @param {string|null} dateString
+   * @returns {string}
+   */
+  function formatDisplayDate(dateString) {
+
+    if (
+      !dateString ||
+      dateString === "---"
+    ) {
+      return "---";
+    }
+
+    const date =
+      parseLocalDate(dateString);
+
+    if (!date) {
+      return dateString;
+    }
+
+    return date.toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }
+    );
+  }
+
+  /**
+   * Convert date to YYYY-MM-DD.
+   * @param {Date} date
+   * @returns {string}
+   */
+  function formatInputDate(date) {
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Get today's local date.
+   * @returns {Date}
+   */
+  function getToday() {
+
+    const today =
+      new Date();
+
+    today.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return today;
+  }
+
+  /**
+   * Check if membership is expired (includes today or past dates).
+   * @param {string|null} expiry
+   * @returns {boolean}
+   */
+  function isExpired(expiry) {
+
+    if (!expiry) {
+      return true;
+    }
+
+    const expiryDate =
+      parseLocalDate(expiry);
+
+    if (!expiryDate) {
+      return true;
+    }
+
+    expiryDate.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return (
+      expiryDate.getTime() <=
+      getToday().getTime()
+    );
+  }
+
+  /**
+   * Get only expired members sorted from today down to older dates
+   */
+  function getExpiredOnlyMembers(members) {
+    const expiredMembers = members.filter((member) => {
+      const expiry = getExpiryDate(member);
+      return isExpired(expiry);
+    });
+
+    return expiredMembers.sort((a, b) => {
+      const dateA = parseLocalDate(getExpiryDate(a));
+      const dateB = parseLocalDate(getExpiryDate(b));
+
+      const timeA = dateA ? dateA.getTime() : 0;
+      const timeB = dateB ? dateB.getTime() : 0;
+
+      return timeB - timeA;
+    });
+  }
+
+  /**
+   * Render member list into results container
+   */
+  function renderMemberList(membersList) {
+    const resultsDiv = document.getElementById('resultsList');
+    resultsDiv.innerHTML = '';
+
+    if (membersList.length === 0) {
+      resultsDiv.innerHTML = `
+        <p style="
+          text-align:center;
+          color:#999;
+          margin-top:20px;
+        ">
+          No members found.
+        </p>
+      `;
+      return;
+    }
+
+    membersList.forEach((member) => {
+      const expiry = getExpiryDate(member);
+      const div = document.createElement('div');
+      div.className = 'result-item';
+
+      const photo = member.photo || 'https://via.placeholder.com/45';
+      const name = member.name || 'Unnamed Member';
+      const id = member.id || 'N/A';
+      const expired = isExpired(expiry);
+
+      div.innerHTML = `
+        <img
+          src="${photo}"
+          class="result-photo"
+          alt="Member Photo"
+        >
+        <div class="result-info">
+          <h4>${name}</h4>
+          <p>
+            ID: ${id} | Expires: ${formatDisplayDate(expiry)}
+          </p>
+        </div>
+        <span style="
+          font-size:0.65rem; 
+          font-weight:bold; 
+          padding: 4px 8px; 
+          border-radius: 6px; 
+          background: ${expired ? '#f8d7da' : '#d4edda'}; 
+          color: ${expired ? '#721c24' : '#155724'};
+        ">
+          ${expired ? 'EXPIRED' : 'ACTIVE'}
+        </span>
+      `;
+
+      div.addEventListener('click', () => selectMember(member));
+      resultsDiv.appendChild(div);
+    });
+  }
+
+  /**
+   * Display suggested renewable members sorted by expiry date priority
+   */
+  function displaySuggestedMembers() {
+    const sectionTitle = document.getElementById('sectionTitle');
+    sectionTitle.style.display = 'flex';
+    sectionTitle.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Expired Memberships`;
+
+    const expiredList = getExpiredOnlyMembers(allMembers);
+    renderMemberList(expiredList);
+  }
+
+  /**
+   * Fetch members.
+   * @returns {Promise<void>}
+   */
+  async function fetchMembers() {
+
+    try {
+
+      const response =
+        await fetch('/api/members');
+
+      if (!response.ok) {
+        throw new Error(
+          'Failed to fetch members from API'
+        );
+      }
+
+      const data =
+        await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error(
+          'Invalid members response'
+        );
+      }
+
+      allMembers = data;
+      displaySuggestedMembers();
+
+    } catch (error) {
+
+      console.error(
+        'Fetch members error:',
+        error
+      );
+
+      document.getElementById(
+        'resultsList'
+      ).innerHTML = `
+        <p style="
+          text-align:center;
+          color:#dc3545;
+        ">
+          Failed to load members.
+        </p>
+      `;
+    }
+  }
+
+  /**
+   * Search members across ALL members (both Active and Expired).
+   */
+  function searchMember() {
+
+    const searchInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('renewSearch'));
+
+    const query =
+      searchInput.value
+        .toUpperCase()
+        .trim();
+
+    document.getElementById(
+      'memberPreview'
+    ).style.display = 'none';
+
+    document.getElementById(
+      'renewalForm'
+    ).style.display = 'none';
+
+    selectedMember = null;
+
+    if (!query) {
+      displaySuggestedMembers();
+      return;
+    }
+
+    const sectionTitle = document.getElementById('sectionTitle');
+    sectionTitle.style.display = 'flex';
+    sectionTitle.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Search Results`;
+
+    const matches =
+      allMembers.filter((member) => {
+
+        const name =
+          member.name
+            ? member.name.toUpperCase()
+            : '';
+
+        const id =
+          member.id
+            ? member.id.toUpperCase()
+            : '';
+
+        return (
+          name.includes(query) ||
+          id.includes(query)
+        );
+      });
+
+    renderMemberList(matches);
+  }
+
+  /**
+   * Select member.
+   * @param {Member} member
+   */
+  function selectMember(member) {
+
+    selectedMember = member;
+
+    document.getElementById(
+      'resultsList'
+    ).innerHTML = '';
+
+    document.getElementById(
+      'sectionTitle'
+    ).style.display = 'none';
+
+    document.getElementById(
+      'renewSearch'
+    ).value =
+      member.name || member.id || '';
+
+    document.getElementById(
+      'memberPreview'
+    ).style.display = 'block';
+
+    document.getElementById(
+      'renewalForm'
+    ).style.display = 'block';
+
+    const currentExpiry =
+      getExpiryDate(member);
+
+    document.getElementById(
+      'prevPhoto'
+    ).src =
+      member.photo ||
+      'https://via.placeholder.com/70';
+
+    document.getElementById(
+      'prevName'
+    ).innerText =
+      member.name ||
+      'Unnamed Member';
+
+    document.getElementById(
+      'prevID'
+    ).innerText =
+      `ID: ${member.id || 'N/A'}`;
+
+    document.getElementById(
+      'prevExpiry'
+    ).innerText =
+      formatDisplayDate(currentExpiry);
+
+    const expired =
+      isExpired(currentExpiry);
+
+    const statusElement =
+      document.getElementById(
+        'prevStatus'
+      );
+
+    statusElement.innerText =
+      expired
+        ? 'EXPIRED'
+        : 'ACTIVE';
+
+    statusElement.style.color =
+      expired
+        ? '#dc3545'
+        : '#28a745';
+
+    // If expired, start today.
+    // If active, start the day after current expiry.
+    let startDate;
+
+    if (expired) {
+
+      startDate =
+        getToday();
+
+    } else {
+
+      const expiryDate =
+        parseLocalDate(currentExpiry);
+
+      startDate =
+        expiryDate || getToday();
+
+      startDate.setDate(
+        startDate.getDate() + 1
+      );
+    }
+
+    document.getElementById(
+      'newStart'
+    ).value =
+      formatInputDate(startDate);
+
+    calculateDueDate();
+  }
+
+  /**
+   * Calculate one-month expiry.
+   */
+  function calculateDueDate() {
+
+    const startInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('newStart'));
+
+    const expiryInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('newExpiry'));
+
+    const startValue =
+      startInput.value;
+
+    if (!startValue) {
+      expiryInput.value = '';
+      return;
+    }
+
+    const startDate =
+      parseLocalDate(startValue);
+
+    if (!startDate) {
+      expiryInput.value = '';
+      return;
+    }
+
+    const originalDay =
+      startDate.getDate();
+
+    startDate.setMonth(
+      startDate.getMonth() + 1
+    );
+
+    if (
+      startDate.getDate() !== originalDay
+    ) {
+
+      startDate.setDate(0);
+    }
+
+    expiryInput.value =
+      formatInputDate(startDate);
+  }
+
+  /**
+   * Reset form and selection on cancel.
+   */
+  function handleRenewalCancel() {
+    selectedMember = null;
+
+    document.getElementById('renewSearch').value = '';
+
+    document.getElementById('memberPreview').style.display = 'none';
+    document.getElementById('renewalForm').style.display = 'none';
+
+    document.getElementById('payAmount').value = '400';
+
+    displaySuggestedMembers();
+  }
+
+  /**
+   * Process renewal.
+   * @returns {Promise<void>}
+   */
+  async function processRenewal() {
+
+    if (!selectedMember) {
+
+      alert(
+        'Please select a member first.'
+      );
+
+      return;
+    }
+
+    const startInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('newStart'));
+
+    const expiryInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('newExpiry'));
+
+    const amountInput =
+      /** @type {HTMLInputElement} */
+      (document.getElementById('payAmount'));
+
+    const chosenStart =
+      startInput.value;
+
+    const chosenExpiry =
+      expiryInput.value;
+
+    const paidAmount =
+      amountInput.value;
+
+    if (!chosenStart) {
+
+      alert(
+        'Please select a new start date.'
+      );
+
+      return;
+    }
+
+    if (!chosenExpiry) {
+
+      alert(
+        'Please select a new expiry date.'
+      );
+
+      return;
+    }
+
+    const memberId =
+      selectedMember.id;
+
+    if (!memberId) {
+
+      alert(
+        'Selected member has no ID.'
+      );
+
+      return;
+    }
+
+    const renewButton =
+      /** @type {HTMLButtonElement} */
+      (document.getElementById('renewButton'));
+
+    renewButton.disabled = true;
+
+    renewButton.innerText =
+      'UPDATING...';
+
+    const updatedMember = {
+
+      ...selectedMember,
+
+      startDate: chosenStart,
+
+      dateStarted: chosenStart,
+
+      expiry: chosenExpiry,
+
+      dateDue: chosenExpiry,
+
+      amount: paidAmount,
+
+      status: 'Active'
+    };
+
+    try {
+
+      const response =
+        await fetch(
+          `/api/members/${encodeURIComponent(memberId)}`,
+          {
+            method: 'PUT',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body:
+              JSON.stringify(updatedMember)
+          }
+        );
+
+      const responseData =
+        await response.json().catch(
+          () => ({})
+        );
+
+      if (!response.ok) {
+
+        throw new Error(
+          responseData.message ||
+          'Server error during renewal'
+        );
+      }
+
+      selectedMember =
+        responseData;
+
+      document.getElementById(
+        'successMsg'
+      ).innerText =
+        `Membership updated for ${
+          selectedMember.name ||
+          memberId
+        }.`;
+
+      toggleModal(
+        'successModal',
+        true
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Renewal process error:',
+        error
+      );
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Could not complete renewal.'
+      );
+
+    } finally {
+
+      renewButton.disabled =
+        false;
+
+      renewButton.innerHTML =
+        '<i class="fa-solid fa-rotate-right"></i> CONFIRM RENEWAL';
+    }
+  }
+
+  /**
+   * Show/hide modal.
+   * @param {string} id
+   * @param {boolean} show
+   */
+  function toggleModal(id, show) {
+
+    const modal =
+      document.getElementById(id);
+
+    if (show) {
+
+      modal.style.display =
+        'flex';
+
+      setTimeout(() => {
+
+        modal.classList.add(
+          'active'
+        );
+
+      }, 10);
+
+    } else {
+
+      modal.classList.remove(
+        'active'
+      );
+
+      setTimeout(() => {
+
+        modal.style.display =
+          'none';
+
+      }, 300);
+    }
+  }
+
+
+  // EVENT LISTENERS
+
+
+  document
+    .getElementById('renewSearch')
+    .addEventListener(
+      'input',
+      searchMember
+    );
+
+  document
+    .getElementById('newStart')
+    .addEventListener(
+      'change',
+      calculateDueDate
+    );
+
+  document
+    .getElementById('renewButton')
+    .addEventListener(
+      'click',
+      processRenewal
+    );
+
+  document
+    .getElementById('doneButton')
+    .addEventListener(
+      'click',
+      () => {
+        window.location.href =
+          'members.html';
+      }
+    );
+
+  // Load members on page start.
+  fetchMembers();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - Jeyo's Hardhit Fitness Center</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #111;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 390px;
+            background: #1c1c1c;
+            border: 2px solid #ffcc00;
+            border-radius: 18px;
+            padding: 30px 24px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            width: 95px;
+            height: 95px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #ffcc00;
+            font-size: 23px;
+        }
+
+        .subtitle {
+            margin: 8px 0 28px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #555;
+            border-radius: 10px;
+            background: #111;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ffcc00;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #ffcc00;
+            color: #111;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+        }
+
+        .error {
+            min-height: 20px;
+            margin-top: 14px;
+            color: #ff5555;
+            font-size: 14px;
+        }
+
+        .server-info {
+            margin-top: 24px;
+            color: #777;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <img
+        src="images/logo.png"
+        class="logo"
+        alt="Jeyo's Hardhit Fitness Center"
+    >
+
+    <h1>ADMIN ACCESS</h1>
+
+    <div class="subtitle">
+        Jeyo's Hardhit Fitness Center
+    </div>
+
+    <form id="loginForm">
+
+        <label for="password">
+            Administrator Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            autocomplete="current-password"
+            placeholder="Enter password"
+            required
+        >
+
+        <button
+            type="submit"
+            id="loginButton"
+        >
+            LOGIN
+        </button>
+
+        <div
+            id="error"
+            class="error"
+        ></div>
+
+    </form>
+
+    <div class="server-info">
+        Connected to Gym System Server
+    </div>
+
+</div>
+
+<script>
+
+const form =
+    document.getElementById("loginForm");
+
+const password =
+    document.getElementById("password");
+
+const button =
+    document.getElementById("loginButton");
+
+const error =
+    document.getElementById("error");
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const value =
+            password.value.trim();
+
+        error.textContent = "";
+
+        if (!value) {
+            error.textContent =
+                "Please enter administrator password.";
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "VERIFYING...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/admin/login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({
+                            password: value
+                        })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (
+                response.ok &&
+                data.success
+            ) {
+
+                localStorage.setItem(
+                    "isLoggedIn",
+                    "true"
+                );
+
+                window.location.href =
+                    "home.html";
+
+                return;
+            }
+
+            error.textContent =
+                data.message ||
+                "Incorrect administrator password.";
+
+        } catch (e) {
+
+            console.error(e);
+
+            error.textContent =
+                "Unable to connect to Gym System Server.";
+
+        }
+
+        button.disabled = false;
+        button.textContent = "LOGIN";
+
+    }
+);
+
+</script>
+
+</body>
+</html>

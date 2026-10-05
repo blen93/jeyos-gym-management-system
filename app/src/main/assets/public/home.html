@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Jeyo's Hardhit Fitness Center</title>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+
+  <script src="js/script.js"></script>
+
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding-bottom: 90px;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .header-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 25px;
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      transform: translateY(30px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .m-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      cursor: pointer;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .btn-no {
+      background: #eee;
+      color: #333;
+    }
+
+    .btn-yes {
+      background: #1a1a1a;
+      color: #ffcc00;
+      box-shadow: 0 4px 0 #000;
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+      padding: 1.2rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .welcome-section {
+      margin-bottom: 20px;
+    }
+
+    .welcome-section h2 {
+      font-family: 'Oswald', sans-serif;
+      margin: 0;
+      text-transform: uppercase;
+      font-size: 1.8rem;
+      color: #1a1a1a;
+    }
+
+    .welcome-section p {
+      margin: 4px 0 0;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    /* =========================
+       METRICS
+    ========================= */
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .metric-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid #eaeaea;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .metric-card.full-width {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2b2b2b 100%);
+      border: none;
+      padding: 20px 18px;
+    }
+
+    .metric-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #888;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .metric-card.full-width .metric-label {
+      color: #b0b0b0;
+    }
+
+    .metric-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-top: 4px;
+      color: #1a1a1a;
+    }
+
+    .metric-card.full-width .metric-value {
+      color: #ffcc00;
+      font-size: 2.2rem;
+    }
+
+    .metric-icon-box {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .bg-active-icon {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .bg-warn-icon {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .metric-card.full-width .metric-icon-box {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 204, 0, 0.15);
+      color: #ffcc00;
+      border: 1px solid rgba(255, 204, 0, 0.2);
+      font-size: 1.5rem;
+    }
+
+    /* =========================
+       SECTION TITLE
+    ========================= */
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      margin: 0 0 12px 0;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* =========================
+       DATE SELECTOR
+    ========================= */
+
+    .date-select-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      padding: 4px 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .date-select-wrapper input[type="date"] {
+      border: none;
+      outline: none;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #333;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* =========================
+       ATTENDANCE LOGS
+    ========================= */
+
+    .logs-box {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #eee;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      padding: 10px 15px;
+    }
+
+    .log-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed #eee;
+      gap: 10px;
+    }
+
+    .log-row:last-child {
+      border-bottom: none;
+    }
+
+    .log-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .log-name {
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: #1a1a1a;
+      display: block;
+      word-break: break-word;
+    }
+
+    .log-id {
+      font-size: 0.75rem;
+      color: #888;
+      display: block;
+    }
+
+    .log-time {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #666;
+      background: #f0f0f0;
+      padding: 4px 8px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+
+    .foot-link {
+      text-decoration: none;
+      color: #999;
+      font-size: 0.7rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .foot-link i {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .foot-link.active {
+      color: #ffcc00;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 360px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .section-title {
+        align-items: flex-start;
+      }
+
+      .date-select-wrapper {
+        padding: 3px 6px;
+      }
+
+      .date-select-wrapper input[type="date"] {
+        font-size: 0.75rem;
+      }
+
+      .metric-value {
+        font-size: 1.5rem;
+      }
+
+      .metric-card.full-width .metric-value {
+        font-size: 1.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-title">
+    Management Dashboard
+  </div>
+</header>
+
+<!-- =========================
+     LOGOUT MODAL
+========================= -->
+
+<div class="modal-overlay" id="logoutModal">
+  <div class="modal-card">
+
+    <i class="fa-solid fa-power-off modal-icon"
+       style="font-size: 3rem; color: #dc3545; margin-bottom: 15px;">
+    </i>
+
+    <h3>LOGOUT</h3>
+
+    <p>
+      Are you sure you want to log out from the system panel?
+    </p>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-no"
+        onclick="toggleModal(false)">
+        CANCEL
+      </button>
+
+      <button
+        class="m-btn btn-yes"
+        onclick="confirmLogout()">
+        LOGOUT
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="container">
+
+  <div class="welcome-section">
+
+    <h2>
+      JEYO'S HARDHIT
+    </h2>
+
+    <p id="liveDateStr">
+      Welcome back, Admin
+    </p>
+
+  </div>
+
+  <!-- =========================
+       METRICS
+  ========================= -->
+
+  <div class="metrics-grid">
+
+    <!-- CASH FLOW -->
+
+    <div class="metric-card full-width">
+
+      <div class="metric-text">
+
+        <span class="metric-label">
+          Estimated Monthly Cash Flow
+        </span>
+
+        <div
+          class="metric-value"
+          id="cashFlowVal">
+          ₱0.00
+        </div>
+
+      </div>
+
+      <div class="metric-icon-box">
+        <i class="fa-solid fa-wallet"></i>
+      </div>
+
+    </div>
+
+
+    <!-- ACTIVE MEMBERS -->
+
+    <div class="metric-card">
+
+      <div class="metric-text">
+
+        <span class="metric-label">
+          Active Members
+        </span>
+
+        <div
+          class="metric-value"
+          id="activeCountVal">
+          0
+        </div>
+
+      </div>
+
+      <div class="metric-icon-box bg-active-icon">
+        <i class="fa-solid fa-user-check"></i>
+      </div>
+
+    </div>
+
+
+    <!-- EXPIRING SOON -->
+
+    <div class="metric-card">
+
+      <div class="metric-text">
+
+        <span class="metric-label">
+          Expiring Soon
+        </span>
+
+        <div
+          class="metric-value"
+          id="warningCountVal">
+          0
+        </div>
+
+      </div>
+
+      <div class="metric-icon-box bg-warn-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+       ATTENDANCE
+  ========================= -->
+
+  <div class="section-title">
+
+    <span>
+      Attendance Tracker
+    </span>
+
+    <div class="date-select-wrapper">
+
+      <i
+        class="fa-solid fa-calendar-days"
+        style="color: #666; font-size: 0.85rem;">
+      </i>
+
+      <input
+        type="date"
+        id="logFilterDatePicker"
+        onchange="loadTargetLogs()">
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="logs-box"
+    id="recentLogsContainer">
+
+    <div
+      style="text-align: center; padding: 20px; color: #999; font-size: 0.85rem;">
+      No entries registered today.
+    </div>
+
+  </div>
+
+</main>
+
+<!-- =========================
+     FOOTER NAVIGATION
+========================= -->
+
+<footer>
+
+  <a
+    href="home.html"
+    class="foot-link active">
+
+    <i class="fa-solid fa-calendar-check"></i>
+
+    <span>
+      Logs
+    </span>
+
+  </a>
+
+
+  <a
+    href="register.html"
+    class="foot-link">
+
+    <i class="fa-solid fa-user-plus"></i>
+
+    <span>
+      Register
+    </span>
+
+  </a>
+
+
+  <a
+    href="renew.html"
+    class="foot-link">
+
+    <i class="fa-solid fa-rotate-right"></i>
+
+    <span>
+      Renew
+    </span>
+
+  </a>
+
+
+  <a
+    href="members.html"
+    class="foot-link">
+
+    <i class="fa-solid fa-users"></i>
+
+    <span>
+      Members
+    </span>
+
+  </a>
+
+
+  <a
+    href="status.html"
+    class="foot-link">
+
+    <i class="fa-solid fa-circle-info"></i>
+
+    <span>
+      Status
+    </span>
+
+  </a>
+
+</footer>
+
+
+<script>
+  
+  /* =========================================================
+     PAGE INITIALIZATION
+  ========================================================= */
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+
+    const dateEl =
+      document.getElementById('liveDateStr');
+
+    if (dateEl) {
+
+      dateEl.innerText =
+        "Welcome back, Admin - " +
+        new Date().toLocaleDateString(
+          "en-US",
+          options
+        );
+    }
+
+
+    /* =========================
+       SET TODAY'S DATE
+    ========================= */
+
+    const todayObj = new Date();
+
+    const offset =
+      todayObj.getTimezoneOffset();
+
+    const localToday =
+      new Date(
+        todayObj.getTime() -
+        (offset * 60 * 1000)
+      );
+
+    const picker =
+      document.getElementById(
+        'logFilterDatePicker'
+      );
+
+    if (picker) {
+
+      picker.value =
+        localToday
+          .toISOString()
+          .split('T')[0];
+
+    }
+
+
+    /* =========================
+       LOAD DASHBOARD DATA
+    ========================= */
+
+    calculateMetrics();
+    loadTargetLogs();
+
+  });
+
+
+  /* =========================================================
+     LOGOUT MODAL
+  ========================================================= */
+
+  /**
+   * @param {boolean} show
+   */
+  function toggleModal(show) {
+
+    const modal =
+      document.getElementById(
+        'logoutModal'
+      );
+
+    if (!modal) return;
+
+
+    if (show) {
+
+      modal.style.display = 'flex';
+
+      setTimeout(() => {
+        modal.classList.add('active');
+      }, 10);
+
+    } else {
+
+      modal.classList.remove('active');
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+
+    }
+  }
+
+
+  /* =========================================================
+     LOGOUT
+  ========================================================= */
+
+  function confirmLogout() {
+
+    localStorage.removeItem(
+      "isLoggedIn"
+    );
+
+    window.location.href =
+      "index.html";
+  }
+
+
+  /* =========================================================
+     GLOBAL FUNCTIONS
+     Needed because HTML onclick/onchange uses these.
+  ========================================================= */
+
+  window.toggleModal =
+    toggleModal;
+
+  window.confirmLogout =
+    confirmLogout;
+
+
+  /* =========================================================
+     CALCULATE DASHBOARD METRICS
+     
+     GET /api/members
+  ========================================================= */
+
+  async function calculateMetrics() {
+
+    try {
+
+      const response =
+        await fetch('/api/members');
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to fetch members"
+        );
+
+      }
+
+
+      /**
+       * @type {MemberRecord[]}
+       */
+      const records =
+        await response.json();
+
+
+      const today =
+        new Date().setHours(
+          0,
+          0,
+          0,
+          0
+        );
+
+
+      const msPerDay =
+        24 * 60 * 60 * 1000;
+
+
+      let activeCount = 0;
+      let warningCount = 0;
+      let estimatedRevenue = 0;
+
+
+      /* =========================
+         PROCESS MEMBERS
+      ========================= */
+
+      records.forEach((m) => {
+
+        const expiryDate =
+          m.expiry ||
+          m.dateDue ||
+          m.date_due ||
+          m.datedue;
+
+
+        if (!expiryDate) {
+          return;
+        }
+
+
+        const expiryTime =
+          new Date(
+            expiryDate
+          ).setHours(
+            0,
+            0,
+            0,
+            0
+          );
+
+
+        const daysRemaining =
+          Math.ceil(
+            (expiryTime - today) /
+            msPerDay
+          );
+
+
+        /* =========================
+           ACTIVE MEMBER
+        ========================= */
+
+        if (daysRemaining >= 0) {
+
+          activeCount++;
+
+
+          /* =========================
+             CALCULATE REVENUE
+          ========================= */
+
+          const amount =
+            m.amount ??
+            m.fee ??
+            0;
+
+
+          const parsedAmount =
+            parseFloat(
+              String(amount)
+            );
+
+
+          if (!Number.isNaN(parsedAmount)) {
+
+            estimatedRevenue +=
+              parsedAmount;
+
+          }
+
+
+          /* =========================
+             EXPIRING WITHIN 7 DAYS
+          ========================= */
+
+          if (daysRemaining <= 7) {
+
+            warningCount++;
+
+          }
+
+        }
+
+      });
+
+
+      /* =========================
+         UPDATE UI
+      ========================= */
+
+      const activeVal =
+        document.getElementById(
+          'activeCountVal'
+        );
+
+
+      const warnVal =
+        document.getElementById(
+          'warningCountVal'
+        );
+
+
+      const cashVal =
+        document.getElementById(
+          'cashFlowVal'
+        );
+
+
+      if (activeVal) {
+
+        activeVal.innerText =
+          String(activeCount);
+
+      }
+
+
+      if (warnVal) {
+
+        warnVal.innerText =
+          String(warningCount);
+
+      }
+
+
+      if (cashVal) {
+
+        cashVal.innerText =
+          "₱" +
+          estimatedRevenue.toLocaleString(
+            'en-US',
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          );
+
+      }
+
+
+    } catch (err) {
+
+      console.error(
+        "Error calculating metrics:",
+        err
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     LOAD ATTENDANCE LOGS
+     
+     GET /api/attendance?date=YYYY-MM-DD
+  ========================================================= */
+
+  async function loadTargetLogs() {
+
+    const container =
+      document.getElementById(
+        'recentLogsContainer'
+      );
+
+
+    const datePicker =
+      document.getElementById(
+        'logFilterDatePicker'
+      );
+
+
+    if (!datePicker || !container) {
+      return;
+    }
+
+
+    const targetIsoDate =
+      datePicker.value;
+
+
+    if (!targetIsoDate) {
+      return;
+    }
+
+
+    try {
+
+      const response =
+        await fetch(
+          `/api/attendance?date=${encodeURIComponent(targetIsoDate)}`
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed to fetch logs"
+        );
+
+      }
+
+
+      /**
+       * @type {AttendanceLog[]}
+       */
+      const logs =
+        await response.json();
+
+
+      /* =========================
+         NO LOGS
+      ========================= */
+
+      if (
+        !logs ||
+        logs.length === 0
+      ) {
+
+        container.innerHTML = `
+          <div style="
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 0.85rem;
+          ">
+            No entries found for this date.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      /* =========================
+         SORT LOGS
+         Newest first
+      ========================= */
+
+      logs.sort((a, b) => {
+
+        const timeA =
+          a.timestamp ||
+          a.id ||
+          0;
+
+
+        const timeB =
+          b.timestamp ||
+          b.id ||
+          0;
+
+
+        return (
+          Number(timeB) -
+          Number(timeA)
+        );
+
+      });
+
+
+      /* =========================
+         CREATE LOG HTML
+      ========================= */
+
+      container.innerHTML =
+        logs.map((log) => {
+
+          let displayTime =
+            log.time || "";
+
+
+          /* =========================
+             CONVERT TIMESTAMP
+          ========================= */
+
+          if (
+            (log.timestamp || log.id) &&
+            !displayTime
+          ) {
+
+            const rawTime =
+              log.timestamp ||
+              log.id;
+
+
+            const dt =
+              new Date(
+                typeof rawTime === 'number'
+                  ? rawTime
+                  : String(rawTime)
+              );
+
+
+            if (
+              !Number.isNaN(
+                dt.getTime()
+              )
+            ) {
+
+              displayTime =
+                dt.toLocaleTimeString(
+                  [],
+                  {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }
+                );
+
+            }
+
+          }
+
+
+          /* =========================
+             MEMBER NAME
+          ========================= */
+
+          const memberName =
+            log.name ||
+            log.memberName ||
+            'Unknown Member';
+
+
+          /* =========================
+             MEMBER ID
+          ========================= */
+
+          const memberId =
+            log.memberId ||
+            log.member_id ||
+            (
+              typeof log.id === 'string'
+                ? log.id
+                : '---'
+            );
+
+
+          /* =========================
+             RETURN HTML
+          ========================= */
+
+          return `
+            <div class="log-row">
+
+              <div class="log-user">
+
+                <div>
+
+                  <span class="log-name">
+                    ${escapeHtml(
+                      String(memberName)
+                    )}
+                  </span>
+
+                  <span class="log-id">
+                    ID:
+                    ${escapeHtml(
+                      String(memberId)
+                    )}
+                  </span>
+
+                </div>
+
+              </div>
+
+              <div class="log-time">
+                ${escapeHtml(
+                  String(displayTime)
+                )}
+              </div>
+
+            </div>
+          `;
+
+        }).join('');
+
+
+    } catch (err) {
+
+      console.error(
+        "Error loading logs from backend:",
+        err
+      );
+
+
+      container.innerHTML = `
+        <div style="
+          text-align: center;
+          padding: 20px;
+          color: #dc3545;
+          font-size: 0.85rem;
+        ">
+          Error loading attendance logs.
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================================================
+     HTML ESCAPE
+     
+     Prevents member names/IDs from injecting HTML.
+  ========================================================= */
+
+  /**
+   * @param {string} value
+   * @returns {string}
+   */
+  function escapeHtml(value) {
+
+    const div =
+      document.createElement('div');
+
+    div.textContent = value;
+
+    return div.innerHTML;
+
+  }
+
+
+  /* =========================================================
+     REGISTER GLOBAL FUNCTION
+  ========================================================= */
+
+  window.loadTargetLogs =
+    loadTargetLogs;
+
+</script>
+
+</body>
+</html>

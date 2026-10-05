@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Member List - Jeyo's Hardhit</title>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+
+  <!-- QRCode Library for dynamic QR generation -->
+  <script src="js/qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/status.css">
+
+  <script src="js/script.js"></script>
+  <script src="js/status.js"></script>
+
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding-bottom: 90px;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      border-bottom: 3px solid #1a1a1a;
+    }
+
+    .header-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-logout {
+      background: #1a1a1a;
+      color: #ffcc00;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.1rem;
+      transition: 0.2s;
+    }
+
+    /* FILTER TABS */
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #666;
+    }
+
+    .tab-btn.active {
+      background: #1a1a1a;
+      color: #ffcc00;
+      border-color: #1a1a1a;
+    }
+
+    .tab-btn.flag-warn.active {
+      background: #ff9800;
+      color: #fff;
+      border-color: #ff9800;
+    }
+
+    .tab-btn.flag-exp.active {
+      background: #dc3545;
+      color: #fff;
+      border-color: #dc3545;
+    }
+
+    /* MODALS */
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 25px;
+      width: 85%;
+      max-width: 340px;
+      text-align: center;
+      transform: translateY(30px);
+      transition:
+        transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .delete-icon {
+      color: #dc3545;
+    }
+
+    .success-icon {
+      color: #28a745;
+    }
+
+    .warn-icon {
+      color: #ffcc00;
+    }
+
+    .sms-icon {
+      color: #007bff;
+    }
+
+    .modal-card h3 {
+      font-family: 'Oswald', sans-serif;
+      margin: 0 0 10px;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+    }
+
+    .modal-card p {
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .m-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      cursor: pointer;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .btn-no {
+      background: #eee;
+      color: #333;
+    }
+
+    .btn-yes {
+      background: #1a1a1a;
+      color: #ffcc00;
+      box-shadow: 0 4px 0 #000;
+    }
+
+    .btn-yes:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #000;
+    }
+
+    /* MEMBER PASS MODAL STYLES */
+
+    .pass-card {
+      background: #111111;
+      padding: 30px 20px;
+      border-radius: 25px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .pass-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .qr-container {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    .qr-container img, .qr-container canvas {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .pass-id {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      color: #ffcc00;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+
+    .pass-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-print {
+      background: #ffcc00;
+      color: #1a1a1a;
+      font-weight: bold;
+    }
+
+    .btn-close-pass {
+      background: #333333;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    /* CONTAINER */
+
+    .container {
+      padding: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+      font-size: 1rem;
+      background: #fff;
+      outline: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .search-box:focus {
+      border-color: #ffcc00;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(255, 204, 0, 0.2);
+    }
+
+    /* MEMBER CARD */
+
+    .member-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      border: 1px solid #eee;
+      border-left: 6px solid #ccc;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .member-card:active {
+      transform: scale(0.98);
+    }
+
+    .status-active {
+      border-left-color: #28a745;
+    }
+
+    .status-warning {
+      border-left-color: #ff9800;
+    }
+
+    .status-expired {
+      border-left-color: #dc3545;
+    }
+
+    .member-photo {
+      width: 65px;
+      height: 65px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #eee;
+      border: 1px solid #ddd;
+      flex-shrink: 0;
+      cursor: pointer;
+      position: relative;
+      z-index: 20;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* ENLARGED MEMBER PHOTO */
+
+    .member-photo.photo-expanded {
+      transform: scale(1.8);
+      z-index: 100;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .member-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .member-info h3 {
+      margin: 0;
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+
+    .member-info p {
+      margin: 2px 0;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .member-info b {
+      color: #333;
+    }
+
+    .right-section {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.6rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .badge-active {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .badge-warning {
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ffe0b2;
+    }
+
+    .badge-expired {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 5px;
+    }
+
+    .btn {
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      position: relative;
+      z-index: 10;
+    }
+
+    .edit-btn {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .id-btn {
+      background: #fffdf0;
+      color: #ffb300;
+      border: 1px solid #ffcc00;
+    }
+
+    .delete-btn {
+      background: #fff5f5;
+      color: #dc3545;
+      border: solid 1px #ffe3e3;
+    }
+
+    /* DETAILS */
+
+    .details-list {
+      text-align: left;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+    }
+
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed #e0e0e0;
+      font-size: 0.9rem;
+      align-items: center;
+    }
+
+    .details-row:last-child {
+      border-bottom: none;
+    }
+
+    .details-label {
+      color: #777;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
+    .details-val {
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    /* EDIT MODAL */
+
+    #editModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      border-top: 5px solid #ffcc00;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h2 {
+      font-family: 'Oswald', sans-serif;
+      margin-top: 0;
+      color: #1a1a1a;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      margin-bottom: 5px;
+      color: #888;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: #fff;
+      color: #333;
+      outline: none;
+    }
+
+    /* ANIMATED PHOTO PICKER STYLES */
+
+    .photo-picker-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .preview-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+    }
+
+    .preview-wrapper img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ffcc00;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      background: #eee;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .preview-wrapper:hover img {
+      transform: scale(1.05);
+    }
+
+    .photo-action-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .photo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .photo-btn-camera {
+      background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+      color: #ffcc00;
+    }
+
+    .photo-btn-upload {
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      color: #1a1a1a;
+    }
+
+    .photo-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .photo-btn:active {
+      transform: translateY(1px) scale(0.96);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .photo-btn i {
+      font-size: 0.9rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .save-btn {
+      flex: 1;
+      background: #1a1a1a;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-family: 'Oswald';
+      cursor: pointer;
+      color: #ffcc00;
+      font-size: 1rem;
+    }
+
+    .cancel-btn {
+      flex: 1;
+      background: #eee;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #666;
+    }
+
+    /* FOOTER */
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+
+    .foot-link {
+      text-decoration: none;
+      color: #999;
+      font-size: 0.7rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .foot-link i {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .foot-link.active {
+      color: #ffcc00;
+    }
+
+    /* PRINT STYLES FOR QR CODE AND ID ONLY */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #passModal, #passModal * {
+        visibility: visible;
+      }
+      #passModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        backdrop-filter: none;
+      }
+      .pass-card {
+        box-shadow: none;
+        background: #ffffff;
+        color: #000000;
+        margin: 0 auto;
+        padding: 0;
+      }
+      .pass-title, .pass-btns {
+        display: none !important;
+      }
+      .qr-container {
+        padding: 0;
+        margin-bottom: 15px;
+      }
+      .pass-id {
+        color: #000000;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-title">GYM MEMBERS LIST</div>
+</header>
+
+
+<!-- REGENERATE ID MODAL -->
+
+<div class="modal-overlay" id="regenModal">
+
+  <div class="modal-card">
+
+    <i class="fa-solid fa-qrcode modal-icon warn-icon"></i>
+
+    <h3>REGENERATE ID?</h3>
+
+    <p>
+      This will create a new ID and
+      <b>permanently disable</b>
+      the old QR code.
+    </p>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-no"
+        onclick="toggleModal('regenModal', false)">
+        CANCEL
+      </button>
+
+      <button
+        class="m-btn btn-yes"
+        id="confirmRegenBtn">
+        REGENERATE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- REGENERATE SUCCESS MODAL -->
+
+<div class="modal-overlay" id="regenSuccessModal">
+
+  <div class="modal-card">
+
+    <i class="fa-solid fa-circle-check modal-icon success-icon"></i>
+
+    <h3>ID UPDATED</h3>
+
+    <p id="regenSuccessMsg">
+      New ID generated successfully.
+    </p>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-yes"
+        onclick="showMemberPass()">
+        OK
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- NEW MEMBER PASS MODAL -->
+
+<div class="modal-overlay" id="passModal">
+
+  <div class="pass-card">
+
+    <div class="pass-title">MEMBER PASS</div>
+
+    <div class="qr-container">
+      <div id="passQrCode"></div>
+    </div>
+
+    <div class="pass-id" id="passDisplayId">---</div>
+
+    <div class="pass-btns">
+
+      <button class="m-btn btn-print" onclick="Android.printPage()">
+        PRINT
+      </button>
+
+      <button class="m-btn btn-close-pass" onclick="toggleModal('passModal', false)">
+        CLOSE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- DELETE MODAL -->
+
+<div class="modal-overlay" id="deleteModal">
+
+  <div class="modal-card">
+
+    <i class="fa-solid fa-trash-can modal-icon delete-icon"></i>
+
+    <h3>DELETE MEMBER</h3>
+
+    <p id="deleteMsg">
+      Are you sure you want to permanently delete this member?
+    </p>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-no"
+        onclick="toggleModal('deleteModal', false)">
+        CANCEL
+      </button>
+
+      <button
+        class="m-btn btn-yes"
+        id="confirmDeleteBtn">
+        DELETE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- VIEW MEMBER MODAL -->
+
+<div class="modal-overlay" id="viewMemberModal">
+
+  <div class="modal-card" style="max-width: 360px;">
+
+    <img
+      id="viewPhoto"
+      src=""
+      alt="Member photo"
+      style="
+        width:90px;
+        height:90px;
+        border-radius:50%;
+        object-fit:cover;
+        border:4px solid #ffcc00;
+        margin-bottom:10px;
+        background:#eee;
+      "
+    >
+
+    <h3
+      id="viewName"
+      style="margin-bottom:15px;color:#1a1a1a;">
+      ---
+    </h3>
+
+    <div class="details-list">
+
+      <div class="details-row">
+        <span class="details-label">M.I.</span>
+        <span class="details-val" id="viewMiddleInitial">---</span>
+      </div>
+
+      <div class="details-row">
+        <span class="details-label">Gender</span>
+        <span class="details-val" id="viewGender">---</span>
+      </div>
+
+      <div class="details-row">
+        <span class="details-label">Phone</span>
+        <span class="details-val" id="viewPhone">---</span>
+      </div>
+
+      <div class="details-row">
+        <span class="details-label">Start Date</span>
+        <span class="details-val" id="viewStart">---</span>
+      </div>
+
+      <div class="details-row">
+        <span class="details-label">Date Due</span>
+        <span class="details-val" id="viewDue">---</span>
+      </div>
+
+      <!-- SMS REMINDER -->
+
+      <div class="details-row">
+
+        <span class="details-label">
+          Action Alert
+        </span>
+
+        <span class="details-val">
+
+          <button
+            id="reminderBtn"
+            type="button"
+            style="
+              background:#007bff;
+              color:white;
+              border:none;
+              padding:6px 12px;
+              border-radius:8px;
+              font-family:'Oswald',sans-serif;
+              font-size:0.75rem;
+              cursor:pointer;
+              display:flex;
+              align-items:center;
+              gap:4px;
+            "
+          >
+            <i class="fa-solid fa-comment-sms"></i>
+            REMIND
+          </button>
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="modal-btns">
+
+      <button
+        class="m-btn btn-yes"
+        onclick="toggleModal('viewMemberModal', false)">
+        CLOSE WINDOW
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================
+     MAIN CONTENT
+========================= -->
+
+<div class="container">
+
+  <input
+    type="text"
+    id="searchInput"
+    class="search-box"
+    placeholder="Search Name, ID, Month (e.g. June)..."
+    onkeyup="filterMembers()"
+  >
+
+  <div class="filter-tabs">
+
+    <button
+      class="tab-btn active"
+      id="tab-all"
+      onclick="filterByStatus('all')">
+      All
+    </button>
+
+    <button
+      class="tab-btn flag-warn"
+      id="tab-warning"
+      onclick="filterByStatus('warning')">
+      Expiring Soon
+    </button>
+
+    <button
+      class="tab-btn flag-exp"
+      id="tab-expired"
+      onclick="filterByStatus('expired')">
+      Expired
+    </button>
+
+  </div>
+
+  <div id="memberList"></div>
+
+</div>
+
+
+<!-- =========================
+     EDIT MEMBER MODAL
+========================= -->
+
+<div id="editModal">
+
+  <div class="modal-content">
+
+    <h2>EDIT MEMBER</h2>
+
+    <input
+      type="hidden"
+      id="editMemberId"
+    >
+
+    <!-- ANIMATED PHOTO SELECTOR -->
+    <div class="form-group">
+      <label style="text-align: center;">Profile Picture</label>
+      
+      <div class="photo-picker-container">
+        <div class="preview-wrapper">
+          <img id="editPhotoPreview" src="" alt="Preview">
+        </div>
+
+        <div class="photo-action-btns">
+          <!-- Hidden inputs for file/camera capture -->
+          <input type="file" id="cameraInput" accept="image/*" capture="user" style="display: none;" onchange="previewSelectedPhoto(event)">
+          <input type="file" id="uploadInput" accept="image/*" style="display: none;" onchange="previewSelectedPhoto(event)">
+
+          <!-- Animated trigger buttons -->
+          <button type="button" class="photo-btn photo-btn-camera" onclick="document.getElementById('cameraInput').click()">
+            <i class="fa-solid fa-camera"></i> Camera
+          </button>
+          
+          <button type="button" class="photo-btn photo-btn-upload" onclick="document.getElementById('uploadInput').click()">
+            <i class="fa-solid fa-upload"></i> Upload
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" style="display: flex; gap: 10px;">
+
+      <div style="flex: 3;">
+        <label>Full Name</label>
+        <input
+          type="text"
+          id="editName"
+        >
+      </div>
+
+      <div style="flex: 1;">
+        <label>M.I.</label>
+        <input
+          type="text"
+          id="editMiddleInitial"
+          maxlength="1"
+          style="text-transform: uppercase; text-align: center;"
+        >
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Phone Number</label>
+
+      <input
+        type="tel"
+        id="editPhone"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Monthly Amount (₱)</label>
+
+      <input
+        type="number"
+        id="editAmount"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Start Date</label>
+
+      <input
+        type="date"
+        id="editStartInput"
+      >
+
+    </div>
+
+    <div class="form-group">
+
+      <label>End Date / Date Due</label>
+
+      <input
+        type="date"
+        id="editExpiry"
+      >
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="save-btn"
+        onclick="saveChanges()">
+        SAVE CHANGES
+      </button>
+
+      <button
+        class="cancel-btn"
+        onclick="closeEditModal()">
+        CANCEL
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     MEMBER UPDATE SUCCESS MODAL
+========================= -->
+<div class="modal-overlay" id="editSuccessModal">
+  <div class="modal-card">
+
+    <i class="fa-solid fa-circle-check modal-icon success-icon"></i>
+
+    <h3>MEMBER UPDATED</h3>
+
+    <p id="editSuccessMsg">
+      Member information updated successfully.
+    </p>
+
+    <div class="modal-btns">
+      <button
+        class="m-btn btn-yes"
+        onclick="closeEditSuccessModal()">
+        OK
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  <a href="home.html" class="foot-link">
+    <i class="fa-solid fa-calendar-check"></i>
+    <span>Logs</span>
+  </a>
+
+  <a href="register.html" class="foot-link">
+    <i class="fa-solid fa-user-plus"></i>
+    <span>Register</span>
+  </a>
+
+  <a href="renew.html" class="foot-link">
+    <i class="fa-solid fa-rotate-right"></i>
+    <span>Renew</span>
+  </a>
+
+  <a href="members.html" class="foot-link active">
+    <i class="fa-solid fa-users"></i>
+    <span>Members</span>
+  </a>
+
+  <a href="status.html" class="foot-link">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>Status</span>
+  </a>
+
+</footer>
+
+
+<script>
+
+  let currentActiveTab = "all";
+  let selectedFileInstance = null;
+  let newlyGeneratedId = "";
+
+  /* =========================
+     PAGE LOAD
+  ========================= */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadMembers();
+  });
+
+
+  /* =========================
+     DATE FUNCTIONS
+  ========================= */
+
+  function formatToInputDate(dateString) {
+    if (!dateString) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return dateString;
+
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) {
+      const parts = dateString.split(/[-/]/);
+      if (parts.length === 3 && parts[2].length === 4) {
+        return `${parts[2]}-${parts[0].padStart(2, "0")}-${parts[1].padStart(2, "0")}`;
+      }
+      return "";
+    }
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+
+  function formatDisplayDate(dateString) {
+    if (!dateString || dateString === "---") return "---";
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString;
+
+    return d.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+  }
+
+
+  /* =========================
+     PHOTO HELPERS
+  ========================= */
+
+  function previewSelectedPhoto(event) {
+    const file = event.target.files[0];
+    if (file) {
+      selectedFileInstance = file;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const previewImg = document.getElementById("editPhotoPreview");
+        if (previewImg) {
+          previewImg.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+
+  function toggleMemberPhoto(image, event) {
+    if (event) event.stopPropagation();
+    if (!image) return;
+    image.classList.toggle("photo-expanded");
+  }
+
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+
+  /* =========================
+     SMS PHONE NUMBER
+  ========================= */
+
+  function normalizeSmsPhone(phone) {
+    if (!phone) return "";
+    let value = String(phone).trim().replace(/\D/g, "");
+    if (value.startsWith("09")) value = "63" + value.substring(1);
+    if (value.startsWith("63") || value.length >= 10) return "+" + value;
+    return "";
+  }
+
+
+  /* =========================
+     MODAL
+  ========================= */
+
+  function toggleModal(id, show) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    if (show) {
+      modal.style.display = "flex";
+      setTimeout(() => {
+        modal.classList.add("active");
+      }, 10);
+    } else {
+      modal.classList.remove("active");
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 300);
+    }
+  }
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  function confirmLogout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+  }
+
+
+  /* =========================
+     LOAD MEMBERS
+  ========================= */
+
+  async function loadMembers() {
+    try {
+      const res = await fetch("/api/members");
+      if (!res.ok) throw new Error("Failed to fetch members");
+
+      const members = await res.json();
+      const listDiv = document.getElementById("memberList");
+      if (!listDiv) return;
+
+      const today = new Date().setHours(0, 0, 0, 0);
+
+      if (members.length === 0) {
+        listDiv.innerHTML = `
+          <div style="text-align:center;padding:60px;color:#999;">
+            <p>No members found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      members.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+      listDiv.innerHTML = members.map((m) => {
+        const expiryDate = m.expiry || m.dateDue || m.date_due || m.datedue || "";
+        const expiryDateObject = new Date(expiryDate);
+        const expiryTime = isNaN(expiryDateObject.getTime()) ? NaN : expiryDateObject.setHours(0, 0, 0, 0);
+        const msPerDay = 24 * 60 * 60 * 1000;
+        const daysRemaining = isNaN(expiryTime) ? -1 : Math.ceil((expiryTime - today) / msPerDay);
+
+        let statusClass = "status-active";
+        let badgeClass = "badge-active";
+        let badgeText = "Active";
+
+        if (daysRemaining < 0) {
+          statusClass = "status-expired";
+          badgeClass = "badge-expired";
+          badgeText = "Expired";
+        } else if (daysRemaining <= 7) {
+          statusClass = "status-warning";
+          badgeClass = "badge-warning";
+          badgeText = daysRemaining === 0 ? "Expires Today" : `${daysRemaining} Days Left`;
+        }
+
+        const formattedExpiry = formatDisplayDate(expiryDate);
+        const searchString = `${m.name || ""} ${m.id || ""} ${formattedExpiry}`.toLowerCase();
+        const safeId = String(m.id || "").replace(/'/g, "\\'");
+        const safeName = String(m.name || "").replace(/'/g, "\\'");
+        const photo = m.photo || "https://via.placeholder.com/65";
+
+        return `
+          <div
+            class="member-card ${statusClass}"
+            data-search="${searchString}"
+            onclick="viewMemberDetails('${safeId}', event)"
+          >
+            <img
+              src="${photo}"
+              class="member-photo"
+              alt="Member photo"
+              onclick="toggleMemberPhoto(this, event)"
+              onerror="this.src='https://via.placeholder.com/65';"
+            >
+
+            <div class="member-info">
+              <h3>${m.name || "Unnamed"}</h3>
+              <p>ID: <b>${m.id || "---"}</b></p>
+              <p>Ends: <b>${formattedExpiry}</b></p>
+            </div>
+
+            <div class="right-section">
+              <span class="badge ${badgeClass}">${badgeText}</span>
+
+              <div class="action-group">
+                <button
+                  class="btn id-btn"
+                  onclick="askRegenID('${safeId}', event)"
+                  title="Regenerate ID"
+                  type="button"
+                >
+                  <i class="fa-solid fa-qrcode"></i>
+                </button>
+
+                <button
+                  class="btn edit-btn"
+                  onclick="openEditModal('${safeId}', event)"
+                  title="Edit Member"
+                  type="button"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button
+                  class="btn delete-btn"
+                  onclick="showDeleteConfirm('${safeId}', '${safeName}', event)"
+                  title="Delete Member"
+                  type="button"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      filterMembers();
+
+    } catch (err) {
+      console.error("Error loading members:", err);
+      const listDiv = document.getElementById("memberList");
+      if (listDiv) {
+        listDiv.innerHTML = `
+          <div style="text-align:center;padding:60px;color:#dc3545;">
+            <p>Error connecting to backend server.</p>
+          </div>
+        `;
+      }
+    }
+  }
+
+
+  /* =========================
+     VIEW MEMBER DETAILS
+  ========================= */
+
+  async function viewMemberDetails(id, event) {
+    if (event) event.stopPropagation();
+
+    try {
+      const res = await fetch(`/api/members/${encodeURIComponent(id)}`);
+      if (!res.ok) return;
+
+      const m = await res.json();
+      const memberMiddleInitial = m.middleInitial || m.mi || "---";
+      const memberPhone = m.phone || "---";
+      const memberStart = m.startDate || m.start || m.start_date || m.startdate || "---";
+      const memberDue = m.expiry || m.dateDue || m.date_due || m.datedue || "---";
+      const memberGender = m.gender || m.sex || "Not Specified";
+
+      const viewPhoto = document.getElementById("viewPhoto");
+      const viewName = document.getElementById("viewName");
+      const viewMiddleInitial = document.getElementById("viewMiddleInitial");
+      const viewGender = document.getElementById("viewGender");
+      const viewPhone = document.getElementById("viewPhone");
+      const viewStart = document.getElementById("viewStart");
+      const viewDue = document.getElementById("viewDue");
+
+      if (viewPhoto) viewPhoto.src = m.photo || "https://via.placeholder.com/150";
+      if (viewName) viewName.innerText = m.name || "---";
+      if (viewMiddleInitial) viewMiddleInitial.innerText = memberMiddleInitial;
+      if (viewGender) viewGender.innerText = memberGender;
+      if (viewPhone) viewPhone.innerText = memberPhone;
+      if (viewStart) viewStart.innerText = formatDisplayDate(memberStart);
+      if (viewDue) viewDue.innerText = formatDisplayDate(memberDue);
+
+      const smsPhone = normalizeSmsPhone(m.phone);
+      const textMessage = `Hi ${m.name || "Member"}! This is Jeyo's Hardhit Fitness Center. Please be reminded that your Gym Monthly due is on ${formatDisplayDate(memberDue)}. See you at the gym!`;
+
+      const reminderBtn = document.getElementById("reminderBtn");
+      if (reminderBtn) {
+        reminderBtn.onclick = (evt) => {
+          evt.stopPropagation();
+          if (!smsPhone) {
+            alert("This member does not have a valid phone number.");
+            return;
+          }
+          window.location.href = `sms:${smsPhone}?body=${encodeURIComponent(textMessage)}`;
+        };
+      }
+
+      toggleModal("viewMemberModal", true);
+
+    } catch (err) {
+      console.error("Failed to load member details:", err);
+    }
+  }
+
+
+  /* =========================
+     REGENERATE ID & SHOW PASS
+  ========================= */
+
+  function askRegenID(oldId, event) {
+    if (event) event.stopPropagation();
+
+    toggleModal("regenModal", true);
+
+    const confirmButton = document.getElementById("confirmRegenBtn");
+    if (!confirmButton) return;
+
+    confirmButton.onclick = async () => {
+      try {
+        const res = await fetch(`/api/members/${encodeURIComponent(oldId)}/regenerate-id`, {
+          method: "POST"
+        });
+
+        if (!res.ok) throw new Error("Failed to regenerate ID");
+
+        const data = await res.json();
+        newlyGeneratedId = data.newId;
+
+        toggleModal("regenModal", false);
+
+        const successMessage = document.getElementById("regenSuccessMsg");
+        if (successMessage) {
+          successMessage.innerHTML = `ID Updated to: <b>${newlyGeneratedId}</b>. Please print a new pass for the member.`;
+        }
+
+        setTimeout(() => {
+          toggleModal("regenSuccessModal", true);
+        }, 350);
+
+        await loadMembers();
+
+      } catch (err) {
+        console.error("Regeneration error:", err);
+        alert("Failed to regenerate ID on server.");
+      }
+    };
+  }
+
+
+  function showMemberPass() {
+    toggleModal("regenSuccessModal", false);
+
+    const passDisplayId = document.getElementById("passDisplayId");
+    const passQrContainer = document.getElementById("passQrCode");
+
+    if (passDisplayId) {
+      passDisplayId.innerText = newlyGeneratedId;
+    }
+
+    if (passQrContainer) {
+      passQrContainer.innerHTML = "";
+      new QRCode(passQrContainer, {
+        text: newlyGeneratedId,
+        width: 180,
+        height: 180,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    setTimeout(() => {
+      toggleModal("passModal", true);
+    }, 350);
+  }
+
+
+  /* =========================
+     OPEN EDIT MODAL
+  ========================= */
+
+  async function openEditModal(id, event) {
+    if (event) event.stopPropagation();
+
+    try {
+      selectedFileInstance = null;
+      const res = await fetch(`/api/members/${encodeURIComponent(id)}`);
+      if (!res.ok) return;
+
+      const m = await res.json();
+
+      const editMemberId = document.getElementById("editMemberId");
+      const editPhotoPreview = document.getElementById("editPhotoPreview");
+      const cameraInput = document.getElementById("cameraInput");
+      const uploadInput = document.getElementById("uploadInput");
+      const editName = document.getElementById("editName");
+      const editMiddleInitial = document.getElementById("editMiddleInitial");
+      const editPhone = document.getElementById("editPhone");
+      const editAmount = document.getElementById("editAmount");
+      const editStartInput = document.getElementById("editStartInput");
+      const editExpiry = document.getElementById("editExpiry");
+
+      if (editMemberId) editMemberId.value = m.id || "";
+      if (editPhotoPreview) editPhotoPreview.src = m.photo || "https://via.placeholder.com/150";
+      if (cameraInput) cameraInput.value = "";
+      if (uploadInput) uploadInput.value = "";
+      if (editName) editName.value = m.name || "";
+      if (editMiddleInitial) editMiddleInitial.value = m.middleInitial || m.mi || "";
+      if (editPhone) editPhone.value = m.phone || "";
+      if (editAmount) editAmount.value = String(m.amount || "400");
+
+      const targetStart = m.startDate || m.start || m.start_date || m.startdate || "";
+      const targetExpiry = m.expiry || m.dateDue || m.date_due || m.datedue || "";
+
+      if (editStartInput) editStartInput.value = formatToInputDate(targetStart);
+      if (editExpiry) editExpiry.value = formatToInputDate(targetExpiry);
+
+      const editModal = document.getElementById("editModal");
+      if (editModal) editModal.style.display = "flex";
+
+    } catch (err) {
+      console.error("Error opening edit modal:", err);
+    }
+  }
+
+
+  function closeEditModal() {
+    const editModal = document.getElementById("editModal");
+    if (editModal) editModal.style.display = "none";
+  }
+
+
+  /* =========================
+     SAVE MEMBER
+  ========================= */
+
+  async function saveChanges() {
+    const editMemberId = document.getElementById("editMemberId");
+    const editPhotoPreview = document.getElementById("editPhotoPreview");
+    const editName = document.getElementById("editName");
+    const editMiddleInitial = document.getElementById("editMiddleInitial");
+    const editPhone = document.getElementById("editPhone");
+    const editAmount = document.getElementById("editAmount");
+    const editStartInput = document.getElementById("editStartInput");
+    const editExpiry = document.getElementById("editExpiry");
+
+    if (!editMemberId || !editName || !editMiddleInitial || !editPhone || !editAmount || !editStartInput || !editExpiry) return;
+
+    const id = editMemberId.value;
+    let photoData = editPhotoPreview ? editPhotoPreview.src : "";
+
+    if (selectedFileInstance) {
+      try {
+        photoData = await fileToBase64(selectedFileInstance);
+      } catch (err) {
+        console.error("Failed to process profile picture file", err);
+      }
+    }
+
+    const updatedData = {
+      name: editName.value.trim(),
+      middleInitial: editMiddleInitial.value.trim().toUpperCase(),
+      phone: editPhone.value.trim(),
+      photo: photoData,
+      amount: editAmount.value,
+      startDate: editStartInput.value,
+      expiry: editExpiry.value
+    };
+
+    try {
+      const res = await fetch(`/api/members/${encodeURIComponent(id)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData)
+      });
+
+      if (!res.ok) throw new Error("Update failed");
+
+      closeEditModal();
+      await loadMembers();
+      showEditSuccessModal();
+
+    } catch (err) {
+      console.error("Failed to save changes:", err);
+      alert("Failed to save member updates.");
+    }
+  }
+
+
+  /* =========================
+     EDIT SUCCESS MODAL
+  ========================= */
+
+  function showEditSuccessModal() {
+    const modal =
+      document.getElementById("editSuccessModal");
+
+    if (!modal) return;
+
+    modal.style.display = "flex";
+
+    requestAnimationFrame(() => {
+      modal.classList.add("active");
+    });
+  }
+
+  function closeEditSuccessModal() {
+    const modal =
+      document.getElementById("editSuccessModal");
+
+    if (!modal) return;
+
+    modal.classList.remove("active");
+
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300);
+  }
+
+  /* =========================
+     DELETE MEMBER
+  ========================= */
+
+  function showDeleteConfirm(id, name, event) {
+    if (event) event.stopPropagation();
+
+    const deleteMsg = document.getElementById("deleteMsg");
+    if (deleteMsg) {
+      deleteMsg.innerText = `Are you sure you want to permanently delete ${name || "this member"}?`;
+    }
+
+    toggleModal("deleteModal", true);
+
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    if (!confirmDeleteBtn) return;
+
+    confirmDeleteBtn.onclick = async () => {
+      try {
+        const res = await fetch(`/api/members/${encodeURIComponent(id)}`, {
+          method: "DELETE"
+        });
+
+        if (!res.ok) throw new Error("Delete failed");
+
+        toggleModal("deleteModal", false);
+        await loadMembers();
+
+      } catch (err) {
+        console.error("Error deleting member:", err);
+        alert("Failed to delete member.");
+      }
+    };
+  }
+
+
+  /* =========================
+     STATUS FILTER
+  ========================= */
+
+  function filterByStatus(statusType) {
+    currentActiveTab = statusType;
+
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.classList.remove("active");
+    });
+
+    const activeButton = document.getElementById("tab-" + statusType);
+    if (activeButton) activeButton.classList.add("active");
+
+    filterMembers();
+  }
+
+
+  /* =========================
+     SEARCH FILTER
+  ========================= */
+
+  function filterMembers() {
+    const searchInput = document.getElementById("searchInput");
+    if (!searchInput) return;
+
+    const term = searchInput.value.toLowerCase().trim();
+
+    document.querySelectorAll(".member-card").forEach((card) => {
+      const searchData = card.getAttribute("data-search") || "";
+      const matchesSearch = !term || searchData.includes(term);
+      const matchesTab = currentActiveTab === "all" || card.classList.contains("status-" + currentActiveTab);
+
+      card.style.display = (matchesSearch && matchesTab) ? "flex" : "none";
+    });
+  }
+
+
+  /* =========================
+     EXPOSE FUNCTIONS FOR INLINE onclick
+  ========================= */
+
+  Object.assign(window, {
+    confirmLogout,
+    viewMemberDetails,
+    askRegenID,
+    showMemberPass,
+    openEditModal,
+    showDeleteConfirm,
+    filterByStatus,
+    filterMembers,
+    toggleModal,
+    closeEditModal,
+    saveChanges,
+    previewSelectedPhoto,
+    toggleMemberPhoto
+  });
+
+</script>
+
+</body>
+</html>

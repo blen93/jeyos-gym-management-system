@@ -1,0 +1,29 @@
+# Android / Gradle
+.gradle/
+build/
+*/build/
+local.properties
+.idea/
+*.iml
+
+# Generated / release files
+*.apk
+*.aab
+*.log
+
+# Backups and environment files
+*.backup
+*.bak
+.env
+.env.*
+secrets/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Production databases
+*.db
+*.sqlite
+*.sqlite3
+!app/src/main/assets/gym.db

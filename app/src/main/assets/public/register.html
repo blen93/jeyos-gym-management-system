@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="js/qrcode.min.js"></script>
+  <title>Register Member - Jeyo's Hardhit</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffcc00">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html"; 
+    }
+  </script>
+
+  <script src="js/script.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      padding-bottom: 90px;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border-bottom: 3px solid #1a1a1a;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-card {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .page {
+      padding: 1rem;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .center-title {
+      text-align: center;
+      margin: 1rem 0;
+      font-size: 1.8rem;
+      font-family: 'Oswald', sans-serif;
+      font-weight: bold;
+      color: #1a1a1a;
+    }
+
+    .id-card-preview {
+      background: #1a1a1a;
+      color: #ffcc00;
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      border: 2px solid #ffcc00;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      background: white;
+      padding: 10px;
+      width: fit-content;
+      margin: 0 auto 10px auto;
+      border-radius: 8px;
+    }
+
+    .id-number {
+      font-size: 1.6rem;
+      font-weight: bold;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.9rem;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: #ffcc00;
+    }
+
+    .media-action-container {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .btn-pop-action {
+      flex: 1;
+      padding: 14px 10px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #1a1a1a;
+      background: linear-gradient(135deg, #ffcc00 0%, #ffb300 100%);
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .btn-pop-action i {
+      font-size: 1.2rem;
+    }
+
+    .btn-pop-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4);
+    }
+
+    .btn-pop-action:active {
+      transform: scale(0.96);
+    }
+
+    .btn-pop-gallery {
+      background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+      color: #ffcc00;
+      border: 1px solid #ffcc00;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .photo-preview-display {
+      display: none;
+      width: 100%;
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 15px;
+      border: 2px solid #ffcc00;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .preview-img-box {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 10px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #ffcc00;
+    }
+
+    .preview-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 1.2rem;
+    }
+
+    .submit {
+      flex: 1.2;
+      background: linear-gradient(180deg, #333 0%, #1a1a1a 100%);
+      color: #ffcc00;
+      border: none;
+      padding: 0.8rem 0.4rem;
+      border-radius: 10px;
+      font-weight: bold;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #000;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-cancel {
+      flex: 0.8;
+      background: #e0e0e0;
+      color: #555;
+      border: none;
+      padding: 0.8rem 0.4rem;
+      border-radius: 10px;
+      font-weight: bold;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #bbb;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease;
+    }
+
+    .submit:active,
+    .btn-cancel:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 transparent;
+    }
+
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #qrModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    #modalQR {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      z-index: 1000;
+    }
+    
+    .foot-link {
+      text-decoration: none;
+      color: #999;
+      font-size: 0.7rem;
+      text-align: center;
+      flex: 1;
+    }
+
+    .foot-link i {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .foot-link.active {
+      color: #ffcc00;
+    }
+
+    #cameraInput {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        margin: 0;
+        size: auto;
+      }
+
+      body * {
+        visibility: hidden !important;
+      }
+
+      #qrModal, #qrModal * {
+        visibility: visible !important;
+      }
+
+      #qrModal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px 0 !important;
+      }
+
+      #qrModalTitle, 
+      .modal-btns-group {
+        display: none !important;
+      }
+
+      #modalQR {
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+        box-shadow: none !important;
+      }
+
+      #modalQR img,
+      #modalQR canvas {
+        display: block !important;
+        margin: 0 auto !important;
+        max-width: 220px !important;
+        height: auto !important;
+      }
+
+      #modalIDText {
+        color: #000 !important;
+        font-size: 2rem !important;
+        font-weight: bold !important;
+        margin: 10px 0 0 0 !important;
+        text-align: center !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-left">
+      <div class="logo-text">REGISTRATION</div>
+    </div>
+  </header>
+
+
+  <!-- PROCESS MODAL -->
+  <div class="modal-overlay" id="processModal">
+    <div class="modal-card">
+      <h3 id="modalTitle">PHOTO REQUIRED</h3>
+      <p id="modalMsg">Please capture or select a photo before registering.</p>
+      <button
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:none;
+          background:#1a1a1a;
+          color:#ffcc00;
+        "
+        onclick="toggleProcessModal(false)"
+      >
+        OK
+      </button>
+    </div>
+  </div>
+
+
+  <!-- HIDDEN CAMERA INPUT -->
+  <input
+    type="file"
+    id="cameraInput"
+    accept="image/*"
+    capture="user"
+    onchange="handleCameraSelection(this.files)"
+  >
+
+
+  <main class="page">
+
+    <div class="center-title">
+      New Membership
+    </div>
+
+
+    <!-- QR / MEMBER ID PREVIEW (Tapping here enlarges WITHOUT Print/Close buttons) -->
+    <div class="id-card-preview" onclick="openModal(false)">
+      <div id="qrcode"></div>
+      <div class="id-number" id="memberIDDisplay">---</div>
+      <p style="font-size:0.7rem; color:#ffcc00; margin-top:8px;">
+        Tap to enlarge / share
+      </p>
+    </div>
+
+
+    <!-- REGISTRATION FORM -->
+    <form id="registrationForm">
+
+      <!-- NAME -->
+      <div class="form-group" style="display:flex;gap:10px;">
+        <div style="flex:3;">
+          <label>Full Name</label>
+          <input type="text" id="fullName" placeholder="Full Name" required>
+        </div>
+        <div style="flex:1;">
+          <label>M.I.</label>
+          <input
+            type="text"
+            id="middleInitial"
+            placeholder="A"
+            maxlength="1"
+            style="text-transform:uppercase; text-align:center;"
+            required
+          >
+        </div>
+      </div>
+
+
+      <!-- GENDER -->
+      <div class="form-group">
+        <label>Gender</label>
+        <select id="gender" required>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+
+
+      <!-- PHONE -->
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="09XX XXXXXXX" required>
+      </div>
+
+
+      <!-- DATES -->
+      <div class="form-group" style="display:flex;gap:10px;">
+        <div style="flex:1;">
+          <label>Start Date</label>
+          <input type="date" id="startDate" required>
+        </div>
+        <div style="flex:1;">
+          <label>Due Date</label>
+          <input type="date" id="endDate" required>
+        </div>
+      </div>
+
+
+      <!-- PAYMENT -->
+      <div class="form-group">
+        <label>Payment (₱)</label>
+        <input type="number" id="amount" value="400" required>
+      </div>
+
+
+      <!-- MEMBER PHOTO -->
+      <div class="form-group">
+        <label>Member Photo</label>
+
+        <div class="media-action-container" id="photoButtonsContainer">
+          <button type="button" class="btn-pop-action" onclick="openCameraModal()">
+            <i class="fa-solid fa-camera"></i> Camera
+          </button>
+          <button type="button" class="btn-pop-action btn-pop-gallery" onclick="openGalleryPicker()">
+            <i class="fa-solid fa-images"></i> Gallery
+          </button>
+        </div>
+
+
+        <!-- PHOTO PREVIEW -->
+        <div class="photo-preview-display" id="photoPreviewContainer">
+          <div class="preview-img-box">
+            <img id="formPreviewImg" src="" alt="Member Photo">
+          </div>
+          <button
+            type="button"
+            class="btn-pop-action btn-pop-gallery"
+            style="margin:auto; padding:8px 16px; font-size:0.9rem;"
+            onclick="resetPhotoSelection()"
+          >
+            <i class="fa-solid fa-rotate-left"></i> Cancel
+          </button>
+        </div>
+
+
+        <!-- GALLERY INPUT -->
+        <input
+          type="file"
+          id="galleryInput"
+          accept="image/*"
+          style="display:none;"
+          onchange="handleGallerySelection(this.files)"
+        >
+
+      </div>
+
+
+      <!-- SUBMIT & CANCEL BUTTONS -->
+      <div class="form-actions">
+        <button type="submit" class="submit" id="submitBtn">
+          <i class="fas fa-user-check"></i> Register
+        </button>
+        <button type="button" class="btn-cancel" onclick="handleFormCancel()">
+          <i class="fas fa-xmark"></i> Cancel
+        </button>
+      </div>
+
+    </form>
+
+  </main>
+
+
+  <!-- QR MODAL -->
+  <div id="qrModal" onclick="handleModalOverlayClick(event)">
+    <h2 id="qrModalTitle" style="font-family:'Oswald'; letter-spacing:2px;">
+      MEMBER PASS
+    </h2>
+
+    <div id="modalQR"></div>
+
+    <div
+      id="modalIDText"
+      style="
+        font-size:1.8rem;
+        font-weight:bold;
+        margin-bottom:25px;
+        font-family:'Oswald';
+        color:#ffcc00;
+      "
+    ></div>
+
+    <div class="modal-btns-group" id="modalBtnsGroup" style="display:flex; gap:15px;">
+      <button
+        onclick="Android.printPage()"
+        style="
+          padding:15px 30px;
+          background:#ffcc00;
+          border:none;
+          border-radius:12px;
+          font-weight:bold;
+          cursor:pointer;
+        "
+      >
+        PRINT
+      </button>
+
+      <button
+        onclick="closeModal()"
+        style="
+          padding:15px 30px;
+          background:#444;
+          color:white;
+          border:none;
+          border-radius:12px;
+          cursor:pointer;
+        "
+      >
+        CLOSE
+      </button>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="home.html" class="foot-link">
+      <i class="fa-solid fa-calendar-check"></i>
+      <span>Logs</span>
+    </a>
+    <a href="register.html" class="foot-link active">
+      <i class="fa-solid fa-user-plus"></i>
+      <span>Register</span>
+    </a>
+    <a href="renew.html" class="foot-link">
+      <i class="fa-solid fa-rotate-right"></i>
+      <span>Renew</span>
+    </a>
+    <a href="members.html" class="foot-link">
+      <i class="fa-solid fa-users"></i>
+      <span>Members</span>
+    </a>
+    <a href="status.html" class="foot-link">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Status</span>
+    </a>
+  </footer>
+
+
+  <script>
+    /* =========================
+       GLOBAL VARIABLES
+    ========================= */
+    let currentID = "";
+    let photoBase64 = "";
+    let isSuccessModal = false;
+
+    /* =========================
+       CAMERA
+    ========================= */
+    function openCameraModal() {
+      const cameraInput = document.getElementById("cameraInput");
+      if (!cameraInput) {
+        toggleProcessModal(true, "CAMERA ERROR", "Camera input could not be found.");
+        return;
+      }
+      cameraInput.value = "";
+      cameraInput.click();
+    }
+
+    function handleCameraSelection(files = null) {
+      const file = (files && files.length > 0) ? files[0] : null;
+      if (!file) return;
+      processImageFile(file);
+    }
+
+    /* =========================
+       GALLERY
+    ========================= */
+    function openGalleryPicker() {
+      const galleryInput = document.getElementById("galleryInput");
+      if (!galleryInput) return;
+      galleryInput.click();
+    }
+
+    function handleGallerySelection(files = null) {
+      const file = (files && files.length > 0) ? files[0] : null;
+      if (!file) return;
+      processImageFile(file);
+    }
+
+    /* =========================
+       IMAGE PROCESSING
+    ========================= */
+    function processImageFile(file) {
+      if (!file.type.startsWith("image/")) {
+        toggleProcessModal(true, "INVALID PHOTO", "Please select a valid image file.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          const size = Math.min(img.width, img.height);
+
+          canvas.width = 200;
+          canvas.height = 200;
+
+          const sourceX = (img.width - size) / 2;
+          const sourceY = (img.height - size) / 2;
+
+          ctx.drawImage(img, sourceX, sourceY, size, size, 0, 0, 200, 200);
+
+          photoBase64 = canvas.toDataURL("image/jpeg", 0.8);
+          displayFormPhotoPreview(photoBase64);
+        };
+
+        img.onerror = function() {
+          toggleProcessModal(true, "PHOTO ERROR", "The selected photo could not be processed.");
+        };
+
+        img.src = event.target.result;
+      };
+
+      reader.onerror = function() {
+        toggleProcessModal(true, "PHOTO ERROR", "The photo could not be loaded.");
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    /* =========================
+       PHOTO PREVIEW
+    ========================= */
+    function displayFormPhotoPreview(base64 = "") {
+      const previewImg = document.getElementById("formPreviewImg");
+      const previewContainer = document.getElementById("photoPreviewContainer");
+      const buttonsContainer = document.getElementById("photoButtonsContainer");
+
+      if (previewImg) previewImg.src = base64;
+      if (previewContainer) previewContainer.style.display = "block";
+      if (buttonsContainer) buttonsContainer.style.display = "none";
+    }
+
+    function resetPhotoSelection() {
+      photoBase64 = "";
+
+      const galleryInput = document.getElementById("galleryInput");
+      const cameraInput = document.getElementById("cameraInput");
+      const previewContainer = document.getElementById("photoPreviewContainer");
+      const buttonsContainer = document.getElementById("photoButtonsContainer");
+      const previewImg = document.getElementById("formPreviewImg");
+
+      if (galleryInput) galleryInput.value = "";
+      if (cameraInput) cameraInput.value = "";
+      if (previewImg) previewImg.src = "";
+      if (previewContainer) previewContainer.style.display = "none";
+      if (buttonsContainer) buttonsContainer.style.display = "flex";
+    }
+
+    /* =========================
+       CANCEL FORM ACTION
+    ========================= */
+    function handleFormCancel() {
+      const form = document.getElementById("registrationForm");
+      if (form) form.reset();
+
+      resetPhotoSelection();
+      setDefaultDates();
+      generateID();
+    }
+
+    /* =========================
+       PROCESS MODAL
+    ========================= */
+    function toggleProcessModal(show = false, title = "", msg = "") {
+      const m = document.getElementById("processModal");
+      if (!m) return;
+
+      if (title) document.getElementById("modalTitle").innerText = title;
+      if (msg) document.getElementById("modalMsg").innerText = msg;
+
+      if (show) {
+        m.style.display = "flex";
+        setTimeout(() => m.classList.add("active"), 10);
+      } else {
+        m.classList.remove("active");
+        setTimeout(() => m.style.display = "none", 300);
+      }
+    }
+
+    /* =========================
+       DEFAULT DATES
+    ========================= */
+    function setDefaultDates() {
+      const today = new Date();
+      const todayStr = today.toISOString().split("T")[0];
+
+      const startDate = document.getElementById("startDate");
+      const endDate = document.getElementById("endDate");
+
+      if (startDate) startDate.value = todayStr;
+
+      const expiryDate = new Date();
+      expiryDate.setMonth(expiryDate.getMonth() + 1);
+
+      if (endDate) {
+        endDate.value = expiryDate.toISOString().split("T")[0];
+      }
+    }
+
+    setDefaultDates();
+
+    /* =========================
+       MEMBER ID
+    ========================= */
+    function generateID() {
+      currentID = "JH" + Math.floor(1000 + Math.random() * 8999);
+
+      const memberIDDisplay = document.getElementById("memberIDDisplay");
+      if (memberIDDisplay) memberIDDisplay.innerText = currentID;
+
+      const qr = document.getElementById("qrcode");
+      if (qr) {
+        qr.innerHTML = "";
+        new QRCode(qr, {
+          text: currentID,
+          width: 100,
+          height: 100
+        });
+      }
+    }
+
+    generateID();
+
+    /* =========================
+       QR MODAL (TOGGLES BUTTONS BASED ON EVENT TYPE)
+    ========================= */
+    function openModal(isSuccess = false) {
+      isSuccessModal = isSuccess;
+      const qrModal = document.getElementById("qrModal");
+      const modalIDText = document.getElementById("modalIDText");
+      const modalQR = document.getElementById("modalQR");
+      const modalBtnsGroup = document.getElementById("modalBtnsGroup");
+
+      if (qrModal) qrModal.style.display = "flex";
+      if (modalIDText) modalIDText.innerText = currentID;
+
+      // Show action buttons if registration succeeded; hide if tapping top preview card
+      if (modalBtnsGroup) {
+        modalBtnsGroup.style.display = isSuccess ? "flex" : "none";
+      }
+
+      if (modalQR) {
+        modalQR.innerHTML = "";
+        new QRCode(modalQR, {
+          text: currentID,
+          width: 200,
+          height: 200
+        });
+      }
+    }
+
+    function handleModalOverlayClick(e) {
+      // Tap anywhere to close when in preview mode (without buttons)
+      if (!isSuccessModal) {
+        closeModal();
+      }
+    }
+
+    function closeModal() {
+      const qrModal = document.getElementById("qrModal");
+      if (qrModal) qrModal.style.display = "none";
+
+      if (isSuccessModal) {
+        handleFormCancel();
+      }
+    }
+
+    /* =========================
+       FORM SUBMISSION
+    ========================= */
+    document.getElementById("registrationForm").onsubmit = async (e = null) => {
+      if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+
+      if (!photoBase64) {
+        toggleProcessModal(true, "PHOTO REQUIRED", "Please capture or choose a photo from the gallery.");
+        return;
+      }
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Registering...`;
+
+      const memberData = {
+        id: currentID,
+        name: document.getElementById("fullName").value.trim(),
+        middleInitial: document.getElementById("middleInitial").value.trim().toUpperCase(),
+        gender: document.getElementById("gender").value,
+        phone: document.getElementById("phone").value,
+        expiry: document.getElementById("endDate").value,
+        dateDue: document.getElementById("endDate").value,
+        photo: photoBase64,
+        amount: document.getElementById("amount").value,
+        startDate: document.getElementById("startDate").value,
+        dateStarted: document.getElementById("startDate").value
+      };
+
+      try {
+        const res = await fetch("/api/members", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(memberData)
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to register member on backend server.");
+        }
+
+        // Trigger modal WITH Print & Close buttons upon successful registration
+        openModal(true);
+
+      } catch (err) {
+        console.error("Registration error:", err);
+        toggleProcessModal(true, "SERVER ERROR", "Could not save member to server. Check network connection.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fas fa-user-check"></i> Register`;
+      }
+    };
+  </script>
+
+</body>
+</html>
