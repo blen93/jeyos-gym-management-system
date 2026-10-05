@@ -27,3 +27,6 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 !app/src/main/assets/gym.db
+
+# Node dependencies
+node_modules/

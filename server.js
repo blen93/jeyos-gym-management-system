@@ -62,12 +62,17 @@ if (!fs.existsSync(storageFolder)) {
 }
 
 const dbPath = path.join(storageFolder, 'gym.db');
+const demoDbPath = path.join(__dirname, 'app', 'src', 'main', 'assets', 'gym.db');
 const SQL = await initSqlJs();
 
 let db;
 if (fs.existsSync(dbPath)) {
   const filebuffer = fs.readFileSync(dbPath);
   db = new SQL.Database(filebuffer);
+} else if (fs.existsSync(demoDbPath)) {
+  const filebuffer = fs.readFileSync(demoDbPath);
+  db = new SQL.Database(filebuffer);
+  saveDatabase();
 } else {
   db = new SQL.Database();
 }
